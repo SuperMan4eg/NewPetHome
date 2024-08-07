@@ -6,4 +6,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\NewPetHome.Applications\NewPetHome.Applications.csproj" />
+    </ItemGroup>
+
 </Project>
