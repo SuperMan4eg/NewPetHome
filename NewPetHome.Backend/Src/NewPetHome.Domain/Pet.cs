@@ -3,6 +3,7 @@
 public class Pet
 {
     private readonly List<Requisites> _requisites;
+    private readonly List<PetPhoto> _photos;
     
     public Guid Id { get;private set; }
     public string Name { get;private set; }
@@ -21,4 +22,5 @@ public class Pet
     public string Status { get;private set; }
     public IReadOnlyList<Requisites> Requisites => _requisites;
     public DateTime CreatedDate { get; private set; }
+    public IReadOnlyList<PetPhoto> Photos => _photos;
 }
