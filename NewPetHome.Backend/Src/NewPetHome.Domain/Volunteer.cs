@@ -1,12 +1,17 @@
-﻿namespace NewPetHome.Domain;
+﻿using NewPetHome.Domain.Shared;
 
-public class Volunteer
+namespace NewPetHome.Domain;
+
+public class Volunteer : Entity
 {
     private readonly List<Requisites> _requisites = [];
     private readonly List<Pet> _pets = [];
     private readonly List<SocialNetwork> _socialNetworks = [];
 
-    public Guid Id { get; private set; }
+    private Volunteer(Guid id) : base(id)
+    {
+    }
+    
     public string FullName { get; private set; } = default!;
     public string Description { get; private set; } = default!;
     public int Experience { get; private set; }
@@ -17,4 +22,5 @@ public class Volunteer
     public IReadOnlyList<SocialNetwork> SocialNetworks => _socialNetworks;
     public IReadOnlyList<Requisites> Requisites => _requisites;
     public IReadOnlyList<Pet> Pets => _pets;
+
 }
