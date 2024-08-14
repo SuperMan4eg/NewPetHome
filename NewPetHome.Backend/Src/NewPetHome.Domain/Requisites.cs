@@ -1,8 +1,24 @@
 ﻿namespace NewPetHome.Domain;
 
-public class Requisites
+public record Requisites
 {
-    public Guid Id { get; private set; }
-    public string Name { get; private set; }
-    public string Description { get; private set; }
+    private Requisites(string name, string description)
+    {
+        Name = name;
+        Description = description;
+    }
+    
+    public string Name { get; }
+    public string Description { get; }
+    
+    public static Requisites Create(string name, string description)
+    {
+        if(name is null)
+            throw new ArgumentNullException(nameof(name));
+        
+        if(description is null)
+            throw new ArgumentNullException(nameof(description));
+        
+        return new Requisites(name, description);
+    }
 }

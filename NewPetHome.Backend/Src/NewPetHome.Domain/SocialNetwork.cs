@@ -1,8 +1,24 @@
 ﻿namespace NewPetHome.Domain;
 
-public class SocialNetwork
+public record SocialNetwork
 {
-    public Guid Id { get; private set; }
-    public string Name { get; private set; }
-    public string Url { get; private set; }
+    private SocialNetwork(string name, string url)
+    {
+        Name = name;
+        Url = url;
+    }
+    
+    public string Name { get;}
+    public string Url { get;}
+        
+    public static SocialNetwork Create(string name, string url)
+    {
+        if(name is null)
+            throw new ArgumentNullException(nameof(name));
+        
+        if(url is null)
+            throw new ArgumentNullException(nameof(url));
+        
+        return new SocialNetwork(name, url);
+    }
 }

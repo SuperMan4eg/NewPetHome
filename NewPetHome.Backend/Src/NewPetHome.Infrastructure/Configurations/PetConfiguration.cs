@@ -13,6 +13,11 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
 
         builder.HasKey(p => p.Id);
 
+        builder.Property(p => p.Id)
+            .HasConversion(
+                id =>id.Value,
+                value => PetId.Create(value));
+        
         builder.Property(p => p.Name)
             .IsRequired()
             .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
@@ -64,14 +69,33 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             .IsRequired()
             .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
 
-        builder.HasMany(p => p.Requisites)
-            .WithOne();
-
         builder.Property(p => p.CreatedDate)
             .IsRequired();
 
-        builder.HasMany(p => p.Photos)
-            .WithOne()
-            .HasForeignKey("pet_id");
+        builder.OwnsOne(p => p.Details, db =>
+        {
+            db.ToJson();
+
+            db.OwnsMany(d => d.Requisites, rb =>
+            {
+                rb.Property(d => d.Name)
+                    .IsRequired()
+                    .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
+
+                rb.Property(d => d.Description)
+                    .IsRequired()
+                    .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
+            });
+
+            db.OwnsMany(d => d.Photos, sb =>
+            {
+                sb.Property(d => d.Path)
+                    .IsRequired()
+                    .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
+
+                sb.Property(d => d.IsMain)
+                    .IsRequired();
+            });
+        });
     }
 }

@@ -2,12 +2,9 @@
 
 namespace NewPetHome.Domain;
 
-public class Pet : Entity
+public class Pet : Entity<PetId>
 {
-    private readonly List<Requisites> _requisites;
-    private readonly List<PetPhoto> _photos;
-    
-    private Pet(Guid id) : base(id)
+    private Pet(PetId id) : base(id)
     {
     }
     
@@ -25,8 +22,6 @@ public class Pet : Entity
     public DateOnly BirthDate { get; private set; }
     public bool IsVaccinated { get; private set; }
     public string Status { get; private set; } = default!;
-    public IReadOnlyList<Requisites> Requisites => _requisites;
     public DateTime CreatedDate { get; private set; }
-    public IReadOnlyList<PetPhoto> Photos => _photos;
-
+    public PetDetails Details { get; private set; } = default!;
 }
