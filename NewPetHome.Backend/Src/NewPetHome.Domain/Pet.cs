@@ -1,11 +1,16 @@
-﻿namespace NewPetHome.Domain;
+﻿using NewPetHome.Domain.Shared;
 
-public class Pet
+namespace NewPetHome.Domain;
+
+public class Pet : Entity
 {
     private readonly List<Requisites> _requisites;
     private readonly List<PetPhoto> _photos;
-
-    public Guid Id { get; private set; }
+    
+    private Pet(Guid id) : base(id)
+    {
+    }
+    
     public string Name { get; private set; } = default!;
     public string Species { get; private set; } = default!;
     public string Description { get; private set; } = default!;
@@ -23,4 +28,5 @@ public class Pet
     public IReadOnlyList<Requisites> Requisites => _requisites;
     public DateTime CreatedDate { get; private set; }
     public IReadOnlyList<PetPhoto> Photos => _photos;
+
 }
