@@ -11,41 +11,66 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
     {
         builder.ToTable("volunteers");
 
-        builder.HasKey(m => m.Id);
+        builder.HasKey(v => v.Id);
 
-        builder.Property(m => m.FullName)
+        builder.Property(v => v.Id)
+            .HasConversion(
+                id =>id.Value,
+                value => VolunteerId.Create(value));
+            
+        builder.Property(v => v.FullName)
             .IsRequired()
             .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
         
-        builder.Property(m => m.Description)
+        builder.Property(v => v.Description)
             .IsRequired()
             .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
 
-        builder.Property(m => m.Experience)
+        builder.Property(v => v.Experience)
             .IsRequired();
         
-        builder.Property(m => m.CountPetsFindHome)
+        builder.Property(v => v.CountPetsFindHome)
             .IsRequired();
     
-        builder.Property(m => m.CountPetsLookingHome)
+        builder.Property(v => v.CountPetsLookingHome)
             .IsRequired();
         
-        builder.Property(m => m.CountPetsInTreatment)
+        builder.Property(v => v.CountPetsInTreatment)
             .IsRequired();
         
-        builder.Property(m => m.PhoneNumber)
+        builder.Property(v => v.PhoneNumber)
             .IsRequired()
             .HasMaxLength(Constants.MAX_PHONE_NUMBER_LENGTH);
         
-        builder.HasMany(m => m.SocialNetworks)
+        builder.HasMany(v => v.Pets)
             .WithOne()
             .HasForeignKey("volunteer_id");
-        
-        builder.HasMany(m => m.Requisites)
-            .WithOne();
-        
-        builder.HasMany(m => m.Pets)
-            .WithOne()
-            .HasForeignKey("volunteer_id");
+
+        builder.OwnsOne(v => v.Details, db =>
+        {
+            db.ToJson();
+
+            db.OwnsMany(d => d.Requisites, rb =>
+            {
+                rb.Property(d => d.Name)
+                    .IsRequired()
+                    .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
+
+                rb.Property(d => d.Description)
+                    .IsRequired()
+                    .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
+            });
+
+            db.OwnsMany(d => d.SocialNetworks, sb =>
+            {
+                sb.Property(d => d.Name)
+                    .IsRequired()
+                    .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
+
+                sb.Property(d => d.Url)
+                    .IsRequired()
+                    .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
+            });
+        });
     }
 }

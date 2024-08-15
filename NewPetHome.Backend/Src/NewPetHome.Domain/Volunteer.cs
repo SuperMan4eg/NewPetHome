@@ -2,13 +2,11 @@
 
 namespace NewPetHome.Domain;
 
-public class Volunteer : Entity
+public class Volunteer : Entity<VolunteerId>
 {
-    private readonly List<Requisites> _requisites = [];
     private readonly List<Pet> _pets = [];
-    private readonly List<SocialNetwork> _socialNetworks = [];
 
-    private Volunteer(Guid id) : base(id)
+    private Volunteer(VolunteerId id) : base(id)
     {
     }
     
@@ -19,8 +17,7 @@ public class Volunteer : Entity
     public int CountPetsLookingHome { get; private set; }
     public int CountPetsInTreatment { get; private set; }
     public string PhoneNumber { get; private set; } = default!;
-    public IReadOnlyList<SocialNetwork> SocialNetworks => _socialNetworks;
-    public IReadOnlyList<Requisites> Requisites => _requisites;
     public IReadOnlyList<Pet> Pets => _pets;
+    public VolunteerDetails Details { get; private set; } = default!;
 
 }

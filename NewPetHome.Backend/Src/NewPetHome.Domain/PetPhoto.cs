@@ -1,8 +1,21 @@
 ﻿namespace NewPetHome.Domain;
 
-public class PetPhoto
+public record PetPhoto
 {
-    public Guid Id { get; private set; }
-    public string Path { get; private set; }
-    public bool IsMain { get; private set; }
+    private PetPhoto(string path, bool isMain)
+    {
+        Path = path;
+        IsMain = isMain;
+    }
+    
+    public string Path { get; }
+    public bool IsMain { get;  }
+
+    public static PetPhoto Create(string path, bool isMain)
+    {
+        if(path is null)
+            throw new ArgumentNullException(nameof(path));
+        
+        return new PetPhoto(path, isMain);
+    }
 }
