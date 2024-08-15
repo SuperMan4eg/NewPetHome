@@ -41,7 +41,6 @@ namespace NewPetHome.Infrastructure.Migrations
                     breed = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     color = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     health_info = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    address = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     weight = table.Column<double>(type: "double precision", nullable: false),
                     height = table.Column<double>(type: "double precision", nullable: false),
                     phone_number = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
@@ -51,6 +50,9 @@ namespace NewPetHome.Infrastructure.Migrations
                     status = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     volunteer_id = table.Column<Guid>(type: "uuid", nullable: true),
+                    city = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    house_number = table.Column<int>(type: "integer", nullable: false),
+                    street = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Details = table.Column<string>(type: "jsonb", nullable: false)
                 },
                 constraints: table =>

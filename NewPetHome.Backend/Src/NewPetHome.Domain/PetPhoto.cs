@@ -8,8 +8,8 @@ public record PetPhoto
         IsMain = isMain;
     }
     
-    public string Path { get; private set; }
-    public bool IsMain { get; private set; }
+    public string Path { get; }
+    public bool IsMain { get;  }
 
     public static PetPhoto Create(string path, bool isMain)
     {

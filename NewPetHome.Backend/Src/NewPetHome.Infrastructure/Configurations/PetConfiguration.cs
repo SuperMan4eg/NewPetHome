@@ -15,17 +15,17 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
 
         builder.Property(p => p.Id)
             .HasConversion(
-                id =>id.Value,
+                id => id.Value,
                 value => PetId.Create(value));
-        
+
         builder.Property(p => p.Name)
             .IsRequired()
             .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
-        
+
         builder.Property(p => p.Species)
             .IsRequired()
             .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
-        
+
         builder.Property(p => p.Description)
             .IsRequired()
             .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
@@ -33,25 +33,38 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
         builder.Property(p => p.Breed)
             .IsRequired()
             .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
-        
+
         builder.Property(p => p.Color)
             .IsRequired()
             .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
-        
+
         builder.Property(p => p.HealthInfo)
             .IsRequired()
             .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
-        
-        builder.Property(p => p.Address)
-            .IsRequired()
-            .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
+
+        builder.ComplexProperty(p => p.Address, ab =>
+        {
+            ab.Property(a => a.City)
+                .IsRequired()
+                .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH)
+                .HasColumnName("city");
+
+            ab.Property(a => a.Street)
+                .IsRequired()
+                .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH)
+                .HasColumnName("street");
+
+            ab.Property(a => a.HouseNumber)
+                .IsRequired()
+                .HasColumnName("house_number");
+        });
 
         builder.Property(p => p.Weight)
             .IsRequired();
 
         builder.Property(p => p.Height)
             .IsRequired();
-        
+
         builder.Property(p => p.PhoneNumber)
             .IsRequired()
             .HasMaxLength(Constants.MAX_PHONE_NUMBER_LENGTH);
@@ -61,10 +74,10 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
 
         builder.Property(p => p.BirthDate)
             .IsRequired();
-        
+
         builder.Property(p => p.IsVaccinated)
             .IsRequired();
-     
+
         builder.Property(p => p.Status)
             .IsRequired()
             .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);

@@ -14,7 +14,7 @@ public class Pet : Entity<PetId>
     public string Breed { get; private set; } = default!;
     public string Color { get; private set; } = default!;
     public string HealthInfo { get; private set; } = default!;
-    public string Address { get; private set; } = default!;
+    public Address Address { get; private set; } = default!;
     public double Weight { get; private set; }
     public double Height { get; private set; }
     public string PhoneNumber { get; private set; } = default!;
