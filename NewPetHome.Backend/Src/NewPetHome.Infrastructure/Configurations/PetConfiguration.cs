@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NewPetHome.Domain;
 using NewPetHome.Domain.Shared;
+using NewPetHome.Domain.Volunteers;
 
 namespace NewPetHome.Infrastructure.Configurations;
 
@@ -22,17 +23,24 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             .IsRequired()
             .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
 
-        builder.Property(p => p.Species)
-            .IsRequired()
-            .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
-
         builder.Property(p => p.Description)
             .IsRequired()
             .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
 
-        builder.Property(p => p.Breed)
-            .IsRequired()
-            .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
+        builder.OwnsOne(p => p.TypeDetails, td =>
+        {
+            td.Property(t => t.SpeciesId)
+                .HasConversion(
+                    id => id.Value,
+                    value => SpeciesId.Create(value))
+                .HasColumnName("species_id");
+
+            td.Property(t => t.BreedId)
+                .HasConversion(
+                    id => id.Value,
+                    value => BreedId.Create(value))
+                .HasColumnName("breed_id");
+        });
 
         builder.Property(p => p.Color)
             .IsRequired()
