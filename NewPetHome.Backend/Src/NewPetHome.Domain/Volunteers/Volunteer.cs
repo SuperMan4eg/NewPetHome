@@ -1,6 +1,6 @@
 ﻿using NewPetHome.Domain.Shared;
 
-namespace NewPetHome.Domain;
+namespace NewPetHome.Domain.Volunteers;
 
 public class Volunteer : Entity<VolunteerId>
 {

@@ -1,4 +1,4 @@
-namespace NewPetHome.Domain;
+namespace NewPetHome.Domain.Volunteers;
 
 public record PetId
 {
@@ -9,7 +9,7 @@ public record PetId
 
     public Guid Value { get; }
 
-    public static PetId NewVolunteerId() => new(Guid.NewGuid());
+    public static PetId NewPetId() => new(Guid.NewGuid());
 
     public static PetId Empty() => new(Guid.Empty);
     

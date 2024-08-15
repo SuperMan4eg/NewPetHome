@@ -12,6 +12,18 @@ namespace NewPetHome.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "species",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_species", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "volunteers",
                 columns: table => new
                 {
@@ -31,14 +43,33 @@ namespace NewPetHome.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "breed",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    species_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_breed", x => new { x.species_id, x.id });
+                    table.ForeignKey(
+                        name: "fk_breed_species_species_id",
+                        column: x => x.species_id,
+                        principalTable: "species",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "pets",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    species = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     description = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
-                    breed = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    species_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    breed_id = table.Column<Guid>(type: "uuid", nullable: false),
                     color = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     health_info = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     weight = table.Column<double>(type: "double precision", nullable: false),
@@ -75,7 +106,13 @@ namespace NewPetHome.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "breed");
+
+            migrationBuilder.DropTable(
                 name: "pets");
+
+            migrationBuilder.DropTable(
+                name: "species");
 
             migrationBuilder.DropTable(
                 name: "volunteers");

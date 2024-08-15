@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NewPetHome.Domain;
+using NewPetHome.Domain.Volunteers;
 
 namespace NewPetHome.Infrastructure;
 
@@ -10,6 +11,7 @@ public class ApplicationDbContext(IConfiguration configuration) : DbContext
     private const string DATABASE = "Database";
 
     public DbSet<Volunteer> Volunteer => Set<Volunteer>();
+    public DbSet<Species> Species => Set<Species>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

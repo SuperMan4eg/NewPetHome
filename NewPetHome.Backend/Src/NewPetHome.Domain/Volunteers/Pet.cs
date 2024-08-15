@@ -1,6 +1,6 @@
 ﻿using NewPetHome.Domain.Shared;
 
-namespace NewPetHome.Domain;
+namespace NewPetHome.Domain.Volunteers;
 
 public class Pet : Entity<PetId>
 {
@@ -9,9 +9,8 @@ public class Pet : Entity<PetId>
     }
     
     public string Name { get; private set; } = default!;
-    public string Species { get; private set; } = default!;
     public string Description { get; private set; } = default!;
-    public string Breed { get; private set; } = default!;
+    public TypeDetails TypeDetails { get; private set; } = default!;
     public string Color { get; private set; } = default!;
     public string HealthInfo { get; private set; } = default!;
     public Address Address { get; private set; } = default!;
