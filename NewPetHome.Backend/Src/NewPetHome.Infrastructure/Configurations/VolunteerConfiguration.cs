@@ -30,15 +30,6 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
         builder.Property(v => v.Experience)
             .IsRequired();
         
-        builder.Property(v => v.CountPetsFindHome)
-            .IsRequired();
-    
-        builder.Property(v => v.CountPetsLookingHome)
-            .IsRequired();
-        
-        builder.Property(v => v.CountPetsInTreatment)
-            .IsRequired();
-        
         builder.Property(v => v.PhoneNumber)
             .IsRequired()
             .HasMaxLength(Constants.MAX_PHONE_NUMBER_LENGTH);

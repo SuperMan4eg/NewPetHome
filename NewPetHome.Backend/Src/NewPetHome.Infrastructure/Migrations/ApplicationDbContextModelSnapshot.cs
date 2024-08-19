@@ -99,8 +99,7 @@ namespace NewPetHome.Infrastructure.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
+                        .HasColumnType("text")
                         .HasColumnName("status");
 
                     b.Property<double>("Weight")
@@ -146,18 +145,6 @@ namespace NewPetHome.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
                         .HasColumnName("id");
-
-                    b.Property<int>("CountPetsFindHome")
-                        .HasColumnType("integer")
-                        .HasColumnName("count_pets_find_home");
-
-                    b.Property<int>("CountPetsInTreatment")
-                        .HasColumnType("integer")
-                        .HasColumnName("count_pets_in_treatment");
-
-                    b.Property<int>("CountPetsLookingHome")
-                        .HasColumnType("integer")
-                        .HasColumnName("count_pets_looking_home");
 
                     b.Property<string>("Description")
                         .IsRequired()

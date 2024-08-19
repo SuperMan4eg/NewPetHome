@@ -20,7 +20,7 @@ public class Pet : Entity<PetId>
     public bool IsCastrated { get; private set; }
     public DateOnly BirthDate { get; private set; }
     public bool IsVaccinated { get; private set; }
-    public string Status { get; private set; } = default!;
+    public PetStatus Status { get; private set; }
     public DateTime CreatedDate { get; private set; }
     public PetDetails Details { get; private set; } = default!;
 }

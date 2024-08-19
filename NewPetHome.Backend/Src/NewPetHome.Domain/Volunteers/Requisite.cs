@@ -1,8 +1,8 @@
 ﻿namespace NewPetHome.Domain.Volunteers;
 
-public record Requisites
+public record Requisite
 {
-    private Requisites(string name, string description)
+    private Requisite(string name, string description)
     {
         Name = name;
         Description = description;
@@ -11,7 +11,7 @@ public record Requisites
     public string Name { get; }
     public string Description { get; }
     
-    public static Requisites Create(string name, string description)
+    public static Requisite Create(string name, string description)
     {
         if(name is null)
             throw new ArgumentNullException(nameof(name));
@@ -19,6 +19,6 @@ public record Requisites
         if(description is null)
             throw new ArgumentNullException(nameof(description));
         
-        return new Requisites(name, description);
+        return new Requisite(name, description);
     }
 }

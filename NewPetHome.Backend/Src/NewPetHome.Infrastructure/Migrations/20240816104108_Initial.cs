@@ -31,9 +31,6 @@ namespace NewPetHome.Infrastructure.Migrations
                     full_name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     description = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     experience = table.Column<int>(type: "integer", nullable: false),
-                    count_pets_find_home = table.Column<int>(type: "integer", nullable: false),
-                    count_pets_looking_home = table.Column<int>(type: "integer", nullable: false),
-                    count_pets_in_treatment = table.Column<int>(type: "integer", nullable: false),
                     phone_number = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
                     Details = table.Column<string>(type: "jsonb", nullable: false)
                 },
@@ -78,7 +75,7 @@ namespace NewPetHome.Infrastructure.Migrations
                     is_castrated = table.Column<bool>(type: "boolean", nullable: false),
                     birth_date = table.Column<DateOnly>(type: "date", nullable: false),
                     is_vaccinated = table.Column<bool>(type: "boolean", nullable: false),
-                    status = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    status = table.Column<string>(type: "text", nullable: false),
                     created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     volunteer_id = table.Column<Guid>(type: "uuid", nullable: true),
                     city = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
