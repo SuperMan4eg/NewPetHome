@@ -15,6 +15,9 @@ public class VolunteersController : ControllerBase
     {
         var result = await handler.Handle(request, cancellationToken);
 
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+
         return Ok(result.Value);
     }
 }

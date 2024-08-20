@@ -1,4 +1,6 @@
-﻿namespace NewPetHome.Domain.Volunteers;
+﻿using NewPetHome.Domain.Shared;
+
+namespace NewPetHome.Domain.Volunteers;
 
 public record PetPhoto
 {
@@ -7,15 +9,17 @@ public record PetPhoto
         Path = path;
         IsMain = isMain;
     }
-    
-    public string Path { get; }
-    public bool IsMain { get;  }
 
-    public static PetPhoto Create(string path, bool isMain)
+    public string Path { get; }
+    public bool IsMain { get; }
+
+    public static Result<PetPhoto> Create(string path, bool isMain)
     {
-        if(path is null)
-            throw new ArgumentNullException(nameof(path));
-        
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            return "Photo path can not be empty";
+        }
+
         return new PetPhoto(path, isMain);
     }
 }

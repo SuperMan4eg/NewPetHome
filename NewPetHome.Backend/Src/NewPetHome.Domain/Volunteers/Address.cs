@@ -1,3 +1,5 @@
+using NewPetHome.Domain.Shared;
+
 namespace NewPetHome.Domain.Volunteers;
 
 public record Address
@@ -13,13 +15,13 @@ public record Address
     public string Street { get; }
     public int HouseNumber { get; }
     
-    public static Address Create(string city, string street, int houseNumber)
+    public static Result<Address> Create(string city, string street, int houseNumber)
     {
         if(string.IsNullOrWhiteSpace(city))
-            throw new ArgumentNullException(nameof(city));
+            return "City can not be empty";
         
         if(string.IsNullOrWhiteSpace(street))
-            throw new ArgumentNullException(nameof(street));
+            return "Street can not be empty";
         
         return new Address(city, street, houseNumber);
     }

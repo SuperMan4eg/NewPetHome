@@ -22,11 +22,11 @@ public class VolunteersRepository : IVolunteersRepository
         return volunteer.Id;
     }
 
-    public async Task<Volunteer> GetById(VolunteerId volunteerId)
+    public async Task<Volunteer> GetById(VolunteerId volunteerId, CancellationToken cancellationToken = default)
     {
         var volunteer = await _dbContext.Volunteer
             .Include(v=>v.Pets)
-            .FirstOrDefaultAsync(v=>v.Id==volunteerId);
+            .FirstOrDefaultAsync(v=>v.Id==volunteerId, cancellationToken);
         
         if(volunteer is null)
             throw new Exception("Volunteer not found");

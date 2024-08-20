@@ -2,7 +2,7 @@
 
 namespace NewPetHome.Domain.Volunteers;
 
-public class Volunteer : Entity<VolunteerId>
+public sealed class Volunteer : Entity<VolunteerId>
 {
     private readonly List<Pet> _pets = [];
 
@@ -11,36 +11,41 @@ public class Volunteer : Entity<VolunteerId>
     }
 
     private Volunteer(
-        VolunteerId id, string fullName, int experience, string description, string phoneNumber,
-        List<Requisite> requisites = default!, List<SocialNetwork> socialNetworks = default!) :
+        VolunteerId id, FullName fullName, int experience, string description, string phoneNumber,
+        VolunteerDetails details) :
         base(id)
     {
         FullName = fullName;
         Experience = experience;
         Description = description;
         PhoneNumber = phoneNumber;
-        Details = VolunteerDetails.Create(requisites, socialNetworks);
+        Details = details;
     }
 
-    public string FullName { get; private set; } = default!;
+    public FullName FullName { get; private set; } = default!;
     public string Description { get; private set; } = default!;
     public int Experience { get; private set; }
     public string PhoneNumber { get; private set; } = default!;
     public IReadOnlyList<Pet> Pets => _pets;
     public VolunteerDetails Details { get; private set; } = default!;
 
-    public static Volunteer Create(VolunteerId id, string fullName, int experience, string description,
-        string phoneNumber, List<Requisite> requisites = default!, List<SocialNetwork> socialNetworks = default!)
+    public static Result<Volunteer> Create(
+        VolunteerId id,
+        FullName fullName,
+        int experience, 
+        string description,
+        string phoneNumber, 
+        VolunteerDetails details)
     {
-        return new(
-            id,
-            fullName,
-            experience,
-            description,
-            phoneNumber,
-            requisites,
-            socialNetworks
-        );
+        if (string.IsNullOrWhiteSpace(description))
+            return "description.Error";
+
+        if (string.IsNullOrWhiteSpace(phoneNumber))
+            return "phoneNumber.Error";
+
+        var volunteer = new Volunteer(id, fullName, experience, description, phoneNumber, details);
+
+        return volunteer;
     }
 
     public void AddPet(Pet pet)
@@ -48,21 +53,9 @@ public class Volunteer : Entity<VolunteerId>
         _pets.Add(pet);
     }
 
-    public int CountPetsFindHome()
-    {
-        var result = _pets.Count(p => p.Status == PetStatus.FindHome);
-        return result;
-    }
+    public int CountPetsFindHome() => _pets.Count(p => p.Status == PetStatus.FindHome);
 
-    public int CountPetsLookingHome()
-    {
-        var result = _pets.Count(p => p.Status == PetStatus.LookingHome);
-        return result;
-    }
+    public int CountPetsLookingHome() => _pets.Count(p => p.Status == PetStatus.LookingHome);
 
-    public int CountPetsInTreatment()
-    {
-        var result = _pets.Count(p => p.Status == PetStatus.InTreatment);
-        return result;
-    }
+    public int CountPetsInTreatment() => _pets.Count(p => p.Status == PetStatus.InTreatment);
 }

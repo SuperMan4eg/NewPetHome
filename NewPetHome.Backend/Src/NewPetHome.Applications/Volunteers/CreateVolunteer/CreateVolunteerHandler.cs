@@ -1,3 +1,4 @@
+using NewPetHome.Domain.Shared;
 using NewPetHome.Domain.Volunteers;
 
 namespace NewPetHome.Applications.Volunteers.CreateVolunteer;
@@ -11,20 +12,30 @@ public class CreateVolunteerHandler
         _volunteersRepository = volunteersRepository;
     }
 
-    public async Task<VolunteerId> Handle(CreateVolunteerRequest request, CancellationToken cancellationToken = default)
+    public async Task<Result<VolunteerId>> Handle(CreateVolunteerRequest request, CancellationToken cancellationToken = default)
     {
         var volunteerId = VolunteerId.NewVolunteerId();
 
-        var requisites = request.Requisites.Select(r => Requisite.Create(r.Name, r.Description)).ToList();
-        var socialNetwork = request.SocialNetwork.Select(r => SocialNetwork.Create(r.Name, r.Url)).ToList();
+        var fullName = FullName.Create(request.FirstName, request.LastName);
         
-        var volunteerResult = Volunteer.Create(
-            volunteerId, request.FullName, request.Experience,
-            request.Description, request.PhoneNumber,
-            requisites, socialNetwork);
-        
-        await _volunteersRepository.Add(volunteerResult, cancellationToken);
+        var requisites = request.Requisites.Select(r =>
+            Requisite.Create(r.Name, r.Description).Value);
 
-        return volunteerResult.Id;
+        var socialNetworks = request.SocialNetwork.Select(r =>
+            SocialNetwork.Create(r.Name, r.Url).Value);
+
+        var details = new VolunteerDetails(requisites, socialNetworks);
+            
+        var volunteerResult = Volunteer.Create(
+            volunteerId,
+            fullName.Value,
+            request.Experience,
+            request.Description,
+            request.PhoneNumber,
+            details);
+
+        await _volunteersRepository.Add(volunteerResult.Value, cancellationToken);
+
+        return volunteerResult.Value.Id;
     }
 }

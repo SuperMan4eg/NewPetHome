@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using NewPetHome.Domain;
 using NewPetHome.Domain.Shared;
 using NewPetHome.Domain.Volunteers;
 
@@ -16,24 +15,33 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
 
         builder.Property(v => v.Id)
             .HasConversion(
-                id =>id.Value,
+                id => id.Value,
                 value => VolunteerId.Create(value));
-            
-        builder.Property(v => v.FullName)
-            .IsRequired()
-            .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
-        
+
+        builder.ComplexProperty(v => v.FullName, fb =>
+        {
+            fb.Property(f => f.FirstName)
+                .IsRequired()
+                .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH)
+                .HasColumnName("first_name");
+
+            fb.Property(f => f.LastName)
+                .IsRequired()
+                .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH)
+                .HasColumnName("last_name");
+        });
+
         builder.Property(v => v.Description)
             .IsRequired()
             .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
 
         builder.Property(v => v.Experience)
             .IsRequired();
-        
+
         builder.Property(v => v.PhoneNumber)
             .IsRequired()
             .HasMaxLength(Constants.MAX_PHONE_NUMBER_LENGTH);
-        
+
         builder.HasMany(v => v.Pets)
             .WithOne()
             .HasForeignKey("volunteer_id");
