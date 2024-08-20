@@ -2,9 +2,16 @@ namespace NewPetHome.Domain.Volunteers;
 
 public record VolunteerDetails
 {
-    private readonly List<Requisites> _requisites = [];
-    private readonly List<SocialNetwork> _socialNetworks = [];
-    
-    public IReadOnlyList<Requisites> Requisites => _requisites;
-    public IReadOnlyList<SocialNetwork> SocialNetworks => _socialNetworks;
+    private VolunteerDetails()
+    {
+    }
+
+    public VolunteerDetails(IEnumerable<Requisite> requisites, IEnumerable<SocialNetwork> socialNetworks)
+    {
+        Requisites = requisites.ToList();
+        SocialNetworks = socialNetworks.ToList();
+    }
+
+    public IReadOnlyList<Requisite> Requisites { get; }
+    public IReadOnlyList<SocialNetwork> SocialNetworks { get; }
 }

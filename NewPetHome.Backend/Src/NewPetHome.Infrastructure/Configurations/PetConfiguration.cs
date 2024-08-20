@@ -87,8 +87,9 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             .IsRequired();
 
         builder.Property(p => p.Status)
-            .IsRequired()
-            .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
+            .HasConversion(
+                status => status.ToString(),
+                value => (PetStatus)Enum.Parse(typeof(PetStatus), value));
 
         builder.Property(p => p.CreatedDate)
             .IsRequired();

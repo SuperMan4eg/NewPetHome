@@ -1,4 +1,6 @@
-﻿namespace NewPetHome.Domain.Volunteers;
+﻿using NewPetHome.Domain.Shared;
+
+namespace NewPetHome.Domain.Volunteers;
 
 public record SocialNetwork
 {
@@ -11,13 +13,13 @@ public record SocialNetwork
     public string Name { get;}
     public string Url { get;}
         
-    public static SocialNetwork Create(string name, string url)
+    public static Result<SocialNetwork> Create(string name, string url)
     {
-        if(name is null)
-            throw new ArgumentNullException(nameof(name));
+        if(string.IsNullOrWhiteSpace(name) || name.Length > Constants.MAX_LOW_TEXT_LENGTH)
+            return $"Social network name can not be empty or more than {Constants.MAX_LOW_TEXT_LENGTH} characters";
         
-        if(url is null)
-            throw new ArgumentNullException(nameof(url));
+        if(string.IsNullOrWhiteSpace(url) || url.Length > Constants.MAX_HIGH_TEXT_LENGTH)
+            return $"Social network url can not be empty or more than {Constants.MAX_HIGH_TEXT_LENGTH} characters";
         
         return new SocialNetwork(name, url);
     }
