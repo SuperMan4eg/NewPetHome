@@ -1,4 +1,4 @@
-namespace NewPetHome.Domain;
+namespace NewPetHome.Domain.Species;
 
 public record BreedId
 {

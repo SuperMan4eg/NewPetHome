@@ -1,3 +1,4 @@
+using CSharpFunctionalExtensions;
 using NewPetHome.Domain.Shared;
 using NewPetHome.Domain.Volunteers;
 
@@ -12,11 +13,15 @@ public class CreateVolunteerHandler
         _volunteersRepository = volunteersRepository;
     }
 
-    public async Task<Result<VolunteerId>> Handle(CreateVolunteerRequest request, CancellationToken cancellationToken = default)
+    public async Task<Result<VolunteerId, Error>> Handle(CreateVolunteerRequest request,
+        CancellationToken cancellationToken = default)
     {
         var volunteerId = VolunteerId.NewVolunteerId();
 
         var fullName = FullName.Create(request.FirstName, request.LastName);
+
+        if(fullName.IsFailure)
+            return fullName.Error;
         
         var requisites = request.Requisites.Select(r =>
             Requisite.Create(r.Name, r.Description).Value);
@@ -25,7 +30,7 @@ public class CreateVolunteerHandler
             SocialNetwork.Create(r.Name, r.Url).Value);
 
         var details = new VolunteerDetails(requisites, socialNetworks);
-            
+
         var volunteerResult = Volunteer.Create(
             volunteerId,
             fullName.Value,
@@ -33,7 +38,10 @@ public class CreateVolunteerHandler
             request.Description,
             request.PhoneNumber,
             details);
-
+        
+        if (volunteerResult.IsFailure)
+            return volunteerResult.Error;
+        
         await _volunteersRepository.Add(volunteerResult.Value, cancellationToken);
 
         return volunteerResult.Value.Id;

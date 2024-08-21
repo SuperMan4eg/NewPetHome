@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using NewPetHome.API.Extensions;
+using NewPetHome.API.Response;
 using NewPetHome.Applications.Volunteers.CreateVolunteer;
 
 namespace NewPetHome.API.Controllers;
@@ -8,7 +10,7 @@ namespace NewPetHome.API.Controllers;
 public class VolunteersController : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> Create(
+    public async Task<ActionResult<Guid>> Create(
         [FromServices] CreateVolunteerHandler handler,
         [FromBody] CreateVolunteerRequest request,
         CancellationToken cancellationToken = default)
@@ -16,8 +18,8 @@ public class VolunteersController : ControllerBase
         var result = await handler.Handle(request, cancellationToken);
 
         if (result.IsFailure)
-            return BadRequest(result.Error);
+            return result.Error.ToResponse();
 
-        return Ok(result.Value);
+        return Ok(Envelope.Ok(result.Value.Value));
     }
 }
