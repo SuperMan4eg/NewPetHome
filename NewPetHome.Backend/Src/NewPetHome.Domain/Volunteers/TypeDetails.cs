@@ -1,4 +1,5 @@
-using NewPetHome.Domain.Shared;
+using CSharpFunctionalExtensions;
+using NewPetHome.Domain.Species;
 
 namespace NewPetHome.Domain.Volunteers;
 

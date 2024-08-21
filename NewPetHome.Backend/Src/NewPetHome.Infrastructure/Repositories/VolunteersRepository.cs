@@ -1,5 +1,7 @@
+using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
 using NewPetHome.Applications.Volunteers;
+using NewPetHome.Domain.Shared;
 using NewPetHome.Domain.Volunteers;
 
 namespace NewPetHome.Infrastructure.Repositories;
@@ -22,14 +24,14 @@ public class VolunteersRepository : IVolunteersRepository
         return volunteer.Id;
     }
 
-    public async Task<Volunteer> GetById(VolunteerId volunteerId, CancellationToken cancellationToken = default)
+    public async Task<Result<Volunteer,Error>> GetById(VolunteerId volunteerId, CancellationToken cancellationToken = default)
     {
         var volunteer = await _dbContext.Volunteer
             .Include(v=>v.Pets)
             .FirstOrDefaultAsync(v=>v.Id==volunteerId, cancellationToken);
         
         if(volunteer is null)
-            throw new Exception("Volunteer not found");
+            return Errors.General.NotFound(volunteerId);
         
         return volunteer;
     }

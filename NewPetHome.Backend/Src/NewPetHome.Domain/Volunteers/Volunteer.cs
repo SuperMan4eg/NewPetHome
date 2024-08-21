@@ -1,8 +1,9 @@
-﻿using NewPetHome.Domain.Shared;
+﻿using CSharpFunctionalExtensions;
+using NewPetHome.Domain.Shared;
 
 namespace NewPetHome.Domain.Volunteers;
 
-public sealed class Volunteer : Entity<VolunteerId>
+public sealed class Volunteer : Shared.Entity<VolunteerId>
 {
     private readonly List<Pet> _pets = [];
 
@@ -29,19 +30,22 @@ public sealed class Volunteer : Entity<VolunteerId>
     public IReadOnlyList<Pet> Pets => _pets;
     public VolunteerDetails Details { get; private set; } = default!;
 
-    public static Result<Volunteer> Create(
+    public static Result<Volunteer, Error> Create(
         VolunteerId id,
         FullName fullName,
-        int experience, 
+        int experience,
         string description,
-        string phoneNumber, 
+        string phoneNumber,
         VolunteerDetails details)
     {
         if (string.IsNullOrWhiteSpace(description))
-            return "description.Error";
+            return Errors.General.ValueIsInvalid("description");
 
         if (string.IsNullOrWhiteSpace(phoneNumber))
-            return "phoneNumber.Error";
+            return Errors.General.ValueIsInvalid("phoneNember");
+
+        if (experience < 0)
+            return Errors.General.ValueIsInvalid("experience");
 
         var volunteer = new Volunteer(id, fullName, experience, description, phoneNumber, details);
 

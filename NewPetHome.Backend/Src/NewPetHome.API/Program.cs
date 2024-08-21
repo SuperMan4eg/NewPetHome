@@ -1,15 +1,13 @@
-﻿using NewPetHome.Applications;
+﻿using NewPetHome.API;
+using NewPetHome.Applications;
 using NewPetHome.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
 builder.Services
-    .AddInfrastructure()
-    .AddApplication();
+    .AddApi()
+    .AddApplication()
+    .AddInfrastructure();
 
 var app = builder.Build();
 
