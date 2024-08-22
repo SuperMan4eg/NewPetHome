@@ -1,6 +1,7 @@
 using CSharpFunctionalExtensions;
 using NewPetHome.Domain.Shared;
-using NewPetHome.Domain.Volunteers;
+using NewPetHome.Domain.VolunteersManagement.Entitys;
+using NewPetHome.Domain.VolunteersManagement.IDs;
 
 namespace NewPetHome.Applications.Volunteers;
 

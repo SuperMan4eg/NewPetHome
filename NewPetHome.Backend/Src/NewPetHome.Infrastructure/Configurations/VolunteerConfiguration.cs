@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NewPetHome.Domain.Shared;
-using NewPetHome.Domain.Volunteers;
+using NewPetHome.Domain.VolunteersManagement.Entitys;
+using NewPetHome.Domain.VolunteersManagement.IDs;
 
 namespace NewPetHome.Infrastructure.Configurations;
 
@@ -31,46 +32,72 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
                 .HasColumnName("last_name");
         });
 
-        builder.Property(v => v.Description)
-            .IsRequired()
-            .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
+        builder.ComplexProperty(v => v.Description, db =>
+        {
+            db.Property(d => d.Value)
+                .IsRequired()
+                .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH)
+                .HasColumnName("description");
+        });
 
-        builder.Property(v => v.Experience)
-            .IsRequired();
+        builder.ComplexProperty(v => v.Email, eb =>
+        {
+            eb.Property(e => e.Value)
+                .IsRequired()
+                .HasColumnName("email");
+        });
+        
+        builder.ComplexProperty(v => v.Experience, eb =>
+        {
+            eb.Property(e => e.Value)
+                .IsRequired()
+                .HasColumnName("experience");
+        });
 
-        builder.Property(v => v.PhoneNumber)
-            .IsRequired()
-            .HasMaxLength(Constants.MAX_PHONE_NUMBER_LENGTH);
+        builder.ComplexProperty(v => v.PhoneNumber, pb =>
+        {
+            pb.Property(p => p.Value)
+                .IsRequired()
+                .HasMaxLength(Constants.MAX_PHONE_NUMBER_LENGTH)
+                .HasColumnName("phone_number");
+        });
 
         builder.HasMany(v => v.Pets)
             .WithOne()
             .HasForeignKey("volunteer_id");
 
-        builder.OwnsOne(v => v.Details, db =>
+        builder.OwnsOne(v => v.Requisites, rb =>
         {
-            db.ToJson();
+            rb.ToJson("requisites");
 
-            db.OwnsMany(d => d.Requisites, rb =>
+            rb.OwnsMany(rl => rl.Requisites, rlb =>
             {
-                rb.Property(d => d.Name)
+                rlb.Property(r => r.Name)
                     .IsRequired()
                     .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
 
-                rb.Property(d => d.Description)
-                    .IsRequired()
-                    .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
-            });
-
-            db.OwnsMany(d => d.SocialNetworks, sb =>
-            {
-                sb.Property(d => d.Name)
-                    .IsRequired()
-                    .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
-
-                sb.Property(d => d.Url)
+                rlb.Property(r => r.Description)
                     .IsRequired()
                     .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
             });
         });
+        
+        builder.OwnsOne(v => v.SocialNetworks, sb =>
+        {
+            sb.ToJson("social_networks");
+            
+            sb.OwnsMany(s => s.Socials, socialsBuilder =>
+            {
+                socialsBuilder.Property(s => s.Name)
+                    .IsRequired()
+                    .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
+
+                socialsBuilder.Property(s => s.Url)
+                    .IsRequired()
+                    .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
+            });
+        });
+
+        builder.Navigation(v => v.Pets).AutoInclude();
     }
 }

@@ -1,4 +1,6 @@
-namespace NewPetHome.Domain.Volunteers;
+using NewPetHome.Domain.Shared.ValueObjects;
+
+namespace NewPetHome.Domain.VolunteersManagement.ValueObjects;
 
 public record PetDetails
 {

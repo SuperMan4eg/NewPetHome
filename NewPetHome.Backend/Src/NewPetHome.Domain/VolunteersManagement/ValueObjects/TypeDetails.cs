@@ -1,7 +1,7 @@
 using CSharpFunctionalExtensions;
-using NewPetHome.Domain.Species;
+using NewPetHome.Domain.SpeciesManagement.IDs;
 
-namespace NewPetHome.Domain.Volunteers;
+namespace NewPetHome.Domain.VolunteersManagement.ValueObjects;
 
 public record TypeDetails
 {

@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using NewPetHome.Domain.Shared;
 
-namespace NewPetHome.Domain.Volunteers;
+namespace NewPetHome.Domain.VolunteersManagement.ValueObjects;
 
 public record PetPhoto
 {

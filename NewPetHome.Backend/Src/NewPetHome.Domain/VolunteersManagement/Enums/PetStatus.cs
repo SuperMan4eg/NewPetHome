@@ -1,4 +1,4 @@
-namespace NewPetHome.Domain.Volunteers;
+namespace NewPetHome.Domain.VolunteersManagement.Enums;
 
 public enum PetStatus
 {

@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NewPetHome.Domain.Shared;
-using NewPetHome.Domain.Species;
+using NewPetHome.Domain.SpeciesManagement;
+using NewPetHome.Domain.SpeciesManagement.IDs;
 
 namespace NewPetHome.Infrastructure.Configurations;
 
