@@ -1,8 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NewPetHome.Domain.Shared;
-using NewPetHome.Domain.Species;
-using NewPetHome.Domain.Volunteers;
+using NewPetHome.Domain.SpeciesManagement.IDs;
+using NewPetHome.Domain.VolunteersManagement.Entitys;
+using NewPetHome.Domain.VolunteersManagement.Enums;
+using NewPetHome.Domain.VolunteersManagement.IDs;
 
 namespace NewPetHome.Infrastructure.Configurations;
 
@@ -23,9 +25,12 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             .IsRequired()
             .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
 
-        builder.Property(p => p.Description)
-            .IsRequired()
-            .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
+        builder.ComplexProperty(p => p.Description, db =>
+        {
+            db.Property(d => d.Value)
+                .IsRequired()
+                .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
+        });
 
         builder.OwnsOne(p => p.TypeDetails, td =>
         {
@@ -73,9 +78,12 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
         builder.Property(p => p.Height)
             .IsRequired();
 
-        builder.Property(p => p.PhoneNumber)
-            .IsRequired()
-            .HasMaxLength(Constants.MAX_PHONE_NUMBER_LENGTH);
+        builder.ComplexProperty(p => p.PhoneNumber, pb =>
+        {
+            pb.Property(p => p.Value)
+                .IsRequired()
+                .HasMaxLength(Constants.MAX_PHONE_NUMBER_LENGTH);
+        });
 
         builder.Property(p => p.IsCastrated)
             .IsRequired();

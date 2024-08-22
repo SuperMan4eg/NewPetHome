@@ -1,6 +1,7 @@
 using NewPetHome.Domain.Shared;
+using NewPetHome.Domain.SpeciesManagement.IDs;
 
-namespace NewPetHome.Domain.Species;
+namespace NewPetHome.Domain.SpeciesManagement;
 
 public class Species : Entity<SpeciesId>
 {

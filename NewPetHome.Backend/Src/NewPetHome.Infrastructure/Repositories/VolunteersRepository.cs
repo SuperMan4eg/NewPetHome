@@ -2,7 +2,8 @@ using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
 using NewPetHome.Applications.Volunteers;
 using NewPetHome.Domain.Shared;
-using NewPetHome.Domain.Volunteers;
+using NewPetHome.Domain.VolunteersManagement.Entitys;
+using NewPetHome.Domain.VolunteersManagement.IDs;
 
 namespace NewPetHome.Infrastructure.Repositories;
 

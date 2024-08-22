@@ -5,8 +5,9 @@ namespace NewPetHome.Applications.Volunteers.CreateVolunteer;
 public record CreateVolunteerRequest(
     string FirstName,
     string LastName,
-    int Experience,
     string Description,
+    string Email,
+    int Experience,
     string PhoneNumber,
     List<SocialNetworkDto> SocialNetwork,
     List<RequisiteDto> Requisites);
