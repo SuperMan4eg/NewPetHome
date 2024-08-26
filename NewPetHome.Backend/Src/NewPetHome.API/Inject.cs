@@ -1,3 +1,6 @@
+using NewPetHome.API.Validation;
+using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
+
 namespace NewPetHome.API;
 
 public static class Inject
@@ -7,7 +10,12 @@ public static class Inject
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
-        
+
+        services.AddFluentValidationAutoValidation(configuration =>
+        {
+            configuration.OverrideDefaultResultFactoryWith<CustomResultFactory>();
+        });
+
         return services;
     }
 }
