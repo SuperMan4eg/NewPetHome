@@ -9,5 +9,5 @@ public record CreateVolunteerRequest(
     string Email,
     int Experience,
     string PhoneNumber,
-    List<SocialNetworkDto> SocialNetwork,
+    List<SocialNetworkDto> SocialNetworks,
     List<RequisiteDto> Requisites);

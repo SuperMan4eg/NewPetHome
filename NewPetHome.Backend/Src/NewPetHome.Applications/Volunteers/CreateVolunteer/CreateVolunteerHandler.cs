@@ -21,39 +21,29 @@ public class CreateVolunteerHandler
     {
         var volunteerId = VolunteerId.NewVolunteerId();
 
-        var fullName = FullName.Create(request.FirstName, request.LastName);
-        if (fullName.IsFailure)
-            return fullName.Error;
+        var fullName = FullName.Create(request.FirstName, request.LastName).Value;
 
-        var description = Description.Create(request.Description);
-        if (description.IsFailure)
-            return description.Error;
+        var description = Description.Create(request.Description).Value;
 
-        var email = Email.Create(request.Email);
-        if (email.IsFailure)
-            return email.Error;
+        var email = Email.Create(request.Email).Value;
 
-        var experience = Experience.Create(request.Experience);
-        if (experience.IsFailure)
-            return experience.Error;
+        var experience = Experience.Create(request.Experience).Value;
 
-        var phoneNumber = PhoneNumber.Create(request.PhoneNumber);
-        if (phoneNumber.IsFailure)
-            return phoneNumber.Error;
+        var phoneNumber = PhoneNumber.Create(request.PhoneNumber).Value;
 
         var requisites = new RequisitesList(request.Requisites.Select(r =>
             Requisite.Create(r.Name, r.Description).Value));
 
-        var socialNetworks = new SocialNetworks(request.SocialNetwork.Select(r =>
+        var socialNetworks = new SocialNetworks(request.SocialNetworks.Select(r =>
             SocialNetwork.Create(r.Name, r.Url).Value));
 
         var volunteerResult = Volunteer.Create(
             volunteerId,
-            fullName.Value,
-            description.Value,
-            email.Value,
-            experience.Value,
-            phoneNumber.Value,
+            fullName,
+            description,
+            email,
+            experience,
+            phoneNumber,
             requisites,
             socialNetworks);
 
