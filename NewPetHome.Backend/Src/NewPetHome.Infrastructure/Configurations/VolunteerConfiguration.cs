@@ -46,7 +46,7 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
                 .IsRequired()
                 .HasColumnName("email");
         });
-        
+
         builder.ComplexProperty(v => v.Experience, eb =>
         {
             eb.Property(e => e.Value)
@@ -64,7 +64,8 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
 
         builder.HasMany(v => v.Pets)
             .WithOne()
-            .HasForeignKey("volunteer_id");
+            .HasForeignKey("volunteer_id")
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.OwnsOne(v => v.Requisites, rb =>
         {
@@ -81,11 +82,11 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
                     .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
             });
         });
-        
+
         builder.OwnsOne(v => v.SocialNetworks, sb =>
         {
             sb.ToJson("social_networks");
-            
+
             sb.OwnsMany(s => s.Socials, socialsBuilder =>
             {
                 socialsBuilder.Property(s => s.Name)
