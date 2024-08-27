@@ -2,7 +2,7 @@ namespace NewPetHome.Domain.Shared;
 
 public record Error
 {
-    public const string SEPARATOR = "||";
+    private const string SEPARATOR = "||";
 
     public string Code { get; }
     public string Message { get; }

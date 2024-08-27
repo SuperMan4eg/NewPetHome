@@ -15,7 +15,7 @@ public sealed class Volunteer : Shared.Entity<VolunteerId>
     {
     }
 
-    private Volunteer(
+    public Volunteer(
         VolunteerId id,
         FullName fullName,
         Description description,
@@ -43,29 +43,6 @@ public sealed class Volunteer : Shared.Entity<VolunteerId>
     public IReadOnlyList<Pet> Pets => _pets;
     public RequisitesList Requisites { get; private set; } = default!;
     public SocialNetworks SocialNetworks { get; private set; } = default!;
-
-    public static Result<Volunteer, Error> Create(
-        VolunteerId id,
-        FullName fullName,
-        Description description,
-        Email email,
-        Experience experience,
-        PhoneNumber phoneNumber,
-        RequisitesList requisites,
-        SocialNetworks socialNetworks)
-    {
-        var volunteer = new Volunteer(
-            id, 
-            fullName, 
-            description,
-            email,
-            experience,
-            phoneNumber,
-            requisites,
-            socialNetworks);
-
-        return volunteer;
-    }
 
     public void AddPet(Pet pet)
     {

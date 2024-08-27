@@ -1,4 +1,5 @@
 using CSharpFunctionalExtensions;
+using Microsoft.Extensions.Logging;
 using NewPetHome.Domain.Shared;
 using NewPetHome.Domain.Shared.ValueObjects;
 using NewPetHome.Domain.VolunteersManagement.Entitys;
@@ -10,10 +11,14 @@ namespace NewPetHome.Applications.Volunteers.CreateVolunteer;
 public class CreateVolunteerHandler
 {
     private readonly IVolunteersRepository _volunteersRepository;
+    private readonly ILogger<CreateVolunteerHandler> _logger;
 
-    public CreateVolunteerHandler(IVolunteersRepository volunteersRepository)
+    public CreateVolunteerHandler(
+        IVolunteersRepository volunteersRepository,
+        ILogger<CreateVolunteerHandler> logger)
     {
         _volunteersRepository = volunteersRepository;
+        _logger = logger;
     }
 
     public async Task<Result<VolunteerId, Error>> Handle(CreateVolunteerRequest request,
@@ -21,7 +26,7 @@ public class CreateVolunteerHandler
     {
         var volunteerId = VolunteerId.NewVolunteerId();
 
-        var fullName = FullName.Create(request.FirstName, request.LastName).Value;
+        var fullName = FullName.Create(request.FullName.FirstName, request.FullName.LastName).Value;
 
         var description = Description.Create(request.Description).Value;
 
@@ -37,7 +42,7 @@ public class CreateVolunteerHandler
         var socialNetworks = new SocialNetworks(request.SocialNetworks.Select(r =>
             SocialNetwork.Create(r.Name, r.Url).Value));
 
-        var volunteerResult = Volunteer.Create(
+        var volunteerResult = new Volunteer(
             volunteerId,
             fullName,
             description,
@@ -47,11 +52,10 @@ public class CreateVolunteerHandler
             requisites,
             socialNetworks);
 
-        if (volunteerResult.IsFailure)
-            return volunteerResult.Error;
+        await _volunteersRepository.Add(volunteerResult, cancellationToken);
 
-        await _volunteersRepository.Add(volunteerResult.Value, cancellationToken);
-
-        return volunteerResult.Value.Id;
+        _logger.LogInformation("Volunteer created with id: {VolunteerId}.", volunteerId);
+        
+        return volunteerResult.Id;
     }
 }
