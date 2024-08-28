@@ -3,7 +3,7 @@ using NewPetHome.Applications.Validation;
 using NewPetHome.Domain.Shared.ValueObjects;
 using NewPetHome.Domain.VolunteersManagement.ValueObjects;
 
-namespace NewPetHome.Applications.Volunteers.CreateVolunteer;
+namespace NewPetHome.Applications.Volunteers.Create;
 
 public class CreateVolunteerRequestValidator : AbstractValidator<CreateVolunteerRequest>
 {

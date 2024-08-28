@@ -1,4 +1,6 @@
 ﻿using NewPetHome.API;
+using NewPetHome.API.Extensions;
+using NewPetHome.API.Middlewares;
 using NewPetHome.Applications;
 using NewPetHome.Infrastructure;
 using Serilog;
@@ -22,6 +24,8 @@ builder.Services
     .AddInfrastructure();
 
 var app = builder.Build();
+
+app.UseExceptionMiddleware();
 
 if (app.Environment.IsDevelopment())
 {

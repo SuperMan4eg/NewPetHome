@@ -1,6 +1,6 @@
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using NewPetHome.Applications.Volunteers.CreateVolunteer;
+using NewPetHome.Applications.Volunteers.Create;
 
 namespace NewPetHome.Applications;
 

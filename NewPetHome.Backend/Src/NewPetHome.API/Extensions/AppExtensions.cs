@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using NewPetHome.Infrastructure;
 
-namespace NewPetHome.API;
+namespace NewPetHome.API.Extensions;
 
 public static class AppExtensions
 {

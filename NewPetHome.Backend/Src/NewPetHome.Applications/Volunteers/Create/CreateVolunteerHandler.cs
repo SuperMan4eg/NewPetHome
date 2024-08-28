@@ -6,7 +6,7 @@ using NewPetHome.Domain.VolunteersManagement.Entitys;
 using NewPetHome.Domain.VolunteersManagement.IDs;
 using NewPetHome.Domain.VolunteersManagement.ValueObjects;
 
-namespace NewPetHome.Applications.Volunteers.CreateVolunteer;
+namespace NewPetHome.Applications.Volunteers.Create;
 
 public class CreateVolunteerHandler
 {

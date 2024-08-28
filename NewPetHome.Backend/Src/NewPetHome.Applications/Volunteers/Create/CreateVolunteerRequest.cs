@@ -1,6 +1,6 @@
 using NewPetHome.Applications.Dtos;
 
-namespace NewPetHome.Applications.Volunteers.CreateVolunteer;
+namespace NewPetHome.Applications.Volunteers.Create;
 
 public record CreateVolunteerRequest(
     FullNameDto FullName,
