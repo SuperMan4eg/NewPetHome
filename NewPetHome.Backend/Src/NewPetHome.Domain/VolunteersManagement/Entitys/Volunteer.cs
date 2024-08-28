@@ -1,6 +1,4 @@
-﻿using CSharpFunctionalExtensions;
-using NewPetHome.Domain.Shared;
-using NewPetHome.Domain.Shared.ValueObjects;
+﻿using NewPetHome.Domain.Shared.ValueObjects;
 using NewPetHome.Domain.VolunteersManagement.Enums;
 using NewPetHome.Domain.VolunteersManagement.IDs;
 using NewPetHome.Domain.VolunteersManagement.ValueObjects;
@@ -57,6 +55,16 @@ public sealed class Volunteer : Shared.Entity<VolunteerId>
         Email = email;
         Experience = experience;
         PhoneNumber = phoneNumber;
+    }
+    
+    public void UpdateRequisites(RequisitesList requisites)
+    {
+        Requisites = requisites;
+    }
+    
+    public void UpdateSocialNetworks(SocialNetworks socialNetworks)
+    {
+        SocialNetworks = socialNetworks;
     }
     
     public void AddPet(Pet pet)

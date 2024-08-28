@@ -9,12 +9,12 @@ namespace NewPetHome.Applications.Volunteers.UpdateMainInfo;
 
 public class UpdateMainInfoHandler
 {
-    private readonly ILogger<CreateVolunteerHandler> _logger;
+    private readonly ILogger<UpdateMainInfoHandler> _logger;
     private readonly IVolunteersRepository _volunteersRepository;
 
     public UpdateMainInfoHandler(
         IVolunteersRepository volunteersRepository,
-        ILogger<CreateVolunteerHandler> logger)
+        ILogger<UpdateMainInfoHandler> logger)
     {
         _volunteersRepository = volunteersRepository;
         _logger = logger;
@@ -42,6 +42,8 @@ public class UpdateMainInfoHandler
             experience,
             phoneNumber);
 
+        _logger.LogInformation("Volunteer main info update with id: {VolunteerId}.", request.VolunteerId);
+        
         return await _volunteersRepository.Save(volunteerResult.Value, cancellationToken);
     }
 }
