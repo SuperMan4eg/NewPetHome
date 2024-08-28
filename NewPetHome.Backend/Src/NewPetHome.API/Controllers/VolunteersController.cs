@@ -1,13 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using NewPetHome.API.Extensions;
-using NewPetHome.API.Response;
 using NewPetHome.Applications.Volunteers.CreateVolunteer;
 
 namespace NewPetHome.API.Controllers;
 
-[ApiController]
-[Route("[controller]")]
-public class VolunteersController : ControllerBase
+public class VolunteersController : ApplicationController
 {
     [HttpPost]
     public async Task<ActionResult<Guid>> Create(
@@ -20,6 +17,6 @@ public class VolunteersController : ControllerBase
         if (result.IsFailure)
             return result.Error.ToResponse();
 
-        return Ok(Envelope.Ok(result.Value.Value));
+        return Ok(result.Value);
     }
 }

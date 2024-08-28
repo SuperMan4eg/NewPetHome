@@ -3,8 +3,7 @@ using NewPetHome.Applications.Dtos;
 namespace NewPetHome.Applications.Volunteers.CreateVolunteer;
 
 public record CreateVolunteerRequest(
-    string FirstName,
-    string LastName,
+    FullNameDto FullName,
     string Description,
     string Email,
     int Experience,
