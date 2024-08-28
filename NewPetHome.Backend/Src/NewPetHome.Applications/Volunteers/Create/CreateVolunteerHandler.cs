@@ -21,7 +21,8 @@ public class CreateVolunteerHandler
         _logger = logger;
     }
 
-    public async Task<Result<VolunteerId, Error>> Handle(CreateVolunteerRequest request,
+    public async Task<Result<VolunteerId, Error>> Handle(
+        CreateVolunteerRequest request,
         CancellationToken cancellationToken = default)
     {
         var volunteerId = VolunteerId.NewVolunteerId();
@@ -55,7 +56,7 @@ public class CreateVolunteerHandler
         await _volunteersRepository.Add(volunteerResult, cancellationToken);
 
         _logger.LogInformation("Volunteer created with id: {VolunteerId}.", volunteerId);
-        
+
         return volunteerResult.Id;
     }
 }

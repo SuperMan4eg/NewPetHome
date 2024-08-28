@@ -14,7 +14,7 @@ public record FullName
     public string FirstName { get; }
     public string LastName { get; }
 
-    public static Result<FullName,Error> Create(string firstName, string lastName)
+    public static Result<FullName, Error> Create(string firstName, string lastName)
     {
         if (string.IsNullOrWhiteSpace(firstName) || firstName.Length > Constants.MAX_LOW_TEXT_LENGTH)
             return Errors.General.ValueIsInvalid("first name");

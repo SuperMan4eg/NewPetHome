@@ -44,6 +44,21 @@ public sealed class Volunteer : Shared.Entity<VolunteerId>
     public RequisitesList Requisites { get; private set; } = default!;
     public SocialNetworks SocialNetworks { get; private set; } = default!;
 
+    public void UpdateMainInfo(
+        FullName fullName,
+        Description description,
+        Email email,
+        Experience experience,
+        PhoneNumber phoneNumber
+    )
+    {
+        FullName= fullName;
+        Description = description;
+        Email = email;
+        Experience = experience;
+        PhoneNumber = phoneNumber;
+    }
+    
     public void AddPet(Pet pet)
     {
         _pets.Add(pet);
