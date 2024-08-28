@@ -13,5 +13,5 @@ public record SocialNetworks
         Socials = socials.ToList();
     }
 
-    public IReadOnlyList<SocialNetwork> Socials { get; } = [];
+    public IReadOnlyList<SocialNetwork> Socials { get; } 
 }
