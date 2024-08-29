@@ -1,3 +1,3 @@
 namespace NewPetHome.Applications.Dtos;
 
-public record UpdateRequisitesDto(List<RequisiteDto> Requisites);
+public record UpdateRequisitesDto(IEnumerable<RequisiteDto> Requisites);

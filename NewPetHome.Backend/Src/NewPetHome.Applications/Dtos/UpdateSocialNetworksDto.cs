@@ -1,3 +1,3 @@
 namespace NewPetHome.Applications.Dtos;
 
-public record UpdateSocialNetworksDto(List<SocialNetworkDto> SocialNetworks);
+public record UpdateSocialNetworksDto(IEnumerable<SocialNetworkDto> SocialNetworks);
