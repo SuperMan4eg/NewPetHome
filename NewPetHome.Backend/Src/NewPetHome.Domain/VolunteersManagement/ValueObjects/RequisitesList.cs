@@ -13,5 +13,5 @@ public record RequisitesList
         Requisites = requisites.ToList();
     }
 
-    public IReadOnlyList<Requisite> Requisites { get; } = [];
+    public IReadOnlyList<Requisite> Requisites { get; }
 }
