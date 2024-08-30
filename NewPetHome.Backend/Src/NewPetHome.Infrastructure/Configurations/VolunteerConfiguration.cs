@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NewPetHome.Domain.Shared;
-using NewPetHome.Domain.VolunteersManagement.Entitys;
+using NewPetHome.Domain.VolunteersManagement.Entities;
 using NewPetHome.Domain.VolunteersManagement.IDs;
 
 namespace NewPetHome.Infrastructure.Configurations;
@@ -98,6 +98,10 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
                     .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
             });
         });
+        
+        builder.Property<bool>("_isDeleted")
+            .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .HasColumnName("is_deleted");
 
         builder.Navigation(v => v.Pets).AutoInclude();
     }

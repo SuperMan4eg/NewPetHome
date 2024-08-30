@@ -2,7 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NewPetHome.Domain.SpeciesManagement;
-using NewPetHome.Domain.VolunteersManagement.Entitys;
+using NewPetHome.Domain.VolunteersManagement.Entities;
+using NewPetHome.Infrastructure.Interceptors;
 
 namespace NewPetHome.Infrastructure;
 
@@ -17,7 +18,10 @@ public class ApplicationDbContext(IConfiguration configuration) : DbContext
     {
         optionsBuilder.UseNpgsql(configuration.GetConnectionString(DATABASE));
         optionsBuilder.UseSnakeCaseNamingConvention();
+        optionsBuilder.EnableSensitiveDataLogging();
         optionsBuilder.UseLoggerFactory(CreateLoggerFactory());
+
+        //optionsBuilder.AddInterceptors(new SoftDeleteInterceptor());
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

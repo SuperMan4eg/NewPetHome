@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NewPetHome.Domain.Shared;
 using NewPetHome.Domain.SpeciesManagement.IDs;
-using NewPetHome.Domain.VolunteersManagement.Entitys;
+using NewPetHome.Domain.VolunteersManagement.Entities;
 using NewPetHome.Domain.VolunteersManagement.Enums;
 using NewPetHome.Domain.VolunteersManagement.IDs;
 
@@ -127,5 +127,9 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
                     .IsRequired();
             });
         });
+        
+        builder.Property<bool>("_isDeleted")
+            .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .HasColumnName("is_deleted");
     }
 }

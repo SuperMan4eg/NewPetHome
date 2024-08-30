@@ -2,7 +2,7 @@ using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 using NewPetHome.Domain.Shared;
 using NewPetHome.Domain.Shared.ValueObjects;
-using NewPetHome.Domain.VolunteersManagement.Entitys;
+using NewPetHome.Domain.VolunteersManagement.Entities;
 using NewPetHome.Domain.VolunteersManagement.IDs;
 using NewPetHome.Domain.VolunteersManagement.ValueObjects;
 

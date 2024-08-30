@@ -2,7 +2,7 @@ using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
 using NewPetHome.Applications.Volunteers;
 using NewPetHome.Domain.Shared;
-using NewPetHome.Domain.VolunteersManagement.Entitys;
+using NewPetHome.Domain.VolunteersManagement.Entities;
 using NewPetHome.Domain.VolunteersManagement.IDs;
 
 namespace NewPetHome.Infrastructure.Repositories;
@@ -32,6 +32,15 @@ public class VolunteersRepository : IVolunteersRepository
         CancellationToken cancellationToken = default)
     {
         _dbContext.Volunteer.Attach(volunteer);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        return volunteer.Id;
+    }
+
+    public async Task<Guid> Delete(Volunteer volunteer, CancellationToken cancellationToken = default)
+    {
+        _dbContext.Volunteer.Remove(volunteer);
+
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         return volunteer.Id;

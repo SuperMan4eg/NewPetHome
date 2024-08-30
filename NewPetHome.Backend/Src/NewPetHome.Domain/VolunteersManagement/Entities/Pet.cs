@@ -4,14 +4,16 @@ using NewPetHome.Domain.VolunteersManagement.Enums;
 using NewPetHome.Domain.VolunteersManagement.IDs;
 using NewPetHome.Domain.VolunteersManagement.ValueObjects;
 
-namespace NewPetHome.Domain.VolunteersManagement.Entitys;
+namespace NewPetHome.Domain.VolunteersManagement.Entities;
 
-public class Pet : Entity<PetId>
+public class Pet : Entity<PetId>, ISoftDeletable
 {
+    private bool _isDeleted = false;
+
     private Pet(PetId id) : base(id)
     {
     }
-    
+
     public string Name { get; private set; } = default!;
     public Description Description { get; private set; } = default!;
     public TypeDetails TypeDetails { get; private set; } = default!;
@@ -27,4 +29,20 @@ public class Pet : Entity<PetId>
     public PetStatus Status { get; private set; }
     public DateTime CreatedDate { get; private set; }
     public PetDetails Details { get; private set; } = default!;
+
+    public void Delete()
+    {
+        if (_isDeleted)
+            return;
+
+        _isDeleted = true;
+    }
+
+    public void Restore()
+    {
+        if (!_isDeleted)
+            return;
+
+        _isDeleted = false;
+    }
 }
