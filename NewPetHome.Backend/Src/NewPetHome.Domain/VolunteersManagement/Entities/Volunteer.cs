@@ -1,12 +1,15 @@
-﻿using NewPetHome.Domain.Shared.ValueObjects;
+﻿using NewPetHome.Domain.Shared;
+using NewPetHome.Domain.Shared.ValueObjects;
 using NewPetHome.Domain.VolunteersManagement.Enums;
 using NewPetHome.Domain.VolunteersManagement.IDs;
 using NewPetHome.Domain.VolunteersManagement.ValueObjects;
 
-namespace NewPetHome.Domain.VolunteersManagement.Entitys;
+namespace NewPetHome.Domain.VolunteersManagement.Entities;
 
-public sealed class Volunteer : Shared.Entity<VolunteerId>
+public sealed class Volunteer : Entity<VolunteerId>, ISoftDeletable
 {
+    private bool _isDeleted = false;
+
     private readonly List<Pet> _pets = [];
 
     private Volunteer(VolunteerId id) : base(id)
@@ -50,23 +53,43 @@ public sealed class Volunteer : Shared.Entity<VolunteerId>
         PhoneNumber phoneNumber
     )
     {
-        FullName= fullName;
+        FullName = fullName;
         Description = description;
         Email = email;
         Experience = experience;
         PhoneNumber = phoneNumber;
     }
-    
+
     public void UpdateRequisites(RequisitesList requisites)
     {
         Requisites = requisites;
     }
-    
+
     public void UpdateSocialNetworks(SocialNetworks socialNetworks)
     {
         SocialNetworks = socialNetworks;
     }
-    
+
+    public void Delete()
+    {
+        if (_isDeleted)
+            return;
+
+        _isDeleted = true;
+        foreach (var pet in _pets)
+            pet.Delete();
+    }
+
+    public void Restore()
+    {
+        if (!_isDeleted)
+            return;
+
+        _isDeleted = false;
+        foreach (var pet in _pets)
+            pet.Restore();
+    }
+
     public void AddPet(Pet pet)
     {
         _pets.Add(pet);
