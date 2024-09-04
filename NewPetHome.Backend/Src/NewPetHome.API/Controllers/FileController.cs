@@ -21,7 +21,9 @@ public class FileController : ApplicationController
     {
         await using var stream = file.OpenReadStream();
 
-        var fileMetaData = new FileMetaData(BUCKET_NAME, Guid.NewGuid().ToString());
+        var filename = Guid.NewGuid().ToString();
+
+        var fileMetaData = new FileMetaData(BUCKET_NAME, filename);
 
         var fileData = new FileData(stream, fileMetaData);
 
@@ -40,9 +42,9 @@ public class FileController : ApplicationController
         [FromRoute] Guid fileName,
         CancellationToken cancellationToken)
     {
-        var fileData = new FileMetaData(BUCKET_NAME, fileName.ToString());
+        var fileMetaData = new FileMetaData(BUCKET_NAME, fileName.ToString());
 
-        var result = await _fileProvider.DeleteFile(fileData, cancellationToken);
+        var result = await _fileProvider.DeleteFile(fileMetaData, cancellationToken);
 
         if (result.IsFailure)
         {
@@ -57,9 +59,9 @@ public class FileController : ApplicationController
         [FromRoute] Guid fileName,
         CancellationToken cancellationToken)
     {
-        var fileData = new FileMetaData(BUCKET_NAME, fileName.ToString());
+        var fileMetaData = new FileMetaData(BUCKET_NAME, fileName.ToString());
 
-        var result = await _fileProvider.GetFileByName(fileData, cancellationToken);
+        var result = await _fileProvider.GetFileByName(fileMetaData, cancellationToken);
 
         if (result.IsFailure)
         {
