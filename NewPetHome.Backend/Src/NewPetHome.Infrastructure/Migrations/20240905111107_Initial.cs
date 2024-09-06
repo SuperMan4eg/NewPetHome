@@ -67,13 +67,8 @@ namespace NewPetHome.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     species_id = table.Column<Guid>(type: "uuid", nullable: false),
                     breed_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    color = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    health_info = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    weight = table.Column<double>(type: "double precision", nullable: false),
-                    height = table.Column<double>(type: "double precision", nullable: false),
                     is_castrated = table.Column<bool>(type: "boolean", nullable: false),
                     birth_date = table.Column<DateOnly>(type: "date", nullable: false),
                     is_vaccinated = table.Column<bool>(type: "boolean", nullable: false),
@@ -84,9 +79,15 @@ namespace NewPetHome.Infrastructure.Migrations
                     city = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     house_number = table.Column<int>(type: "integer", nullable: false),
                     street = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    color_value = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     description_value = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
+                    health_info_value = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    height_value = table.Column<double>(type: "double precision", nullable: false),
+                    name_value = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     phone_number_value = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
-                    Details = table.Column<string>(type: "jsonb", nullable: false)
+                    weight_value = table.Column<double>(type: "double precision", nullable: false),
+                    Photos = table.Column<string>(type: "jsonb", nullable: false),
+                    Requisites = table.Column<string>(type: "jsonb", nullable: false)
                 },
                 constraints: table =>
                 {

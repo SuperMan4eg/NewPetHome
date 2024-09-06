@@ -1,11 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
-using NewPetHome.Domain.Shared;
 
-namespace NewPetHome.Domain.VolunteersManagement.ValueObjects;
+namespace NewPetHome.Domain.Shared.ValueObjects;
 
-public record PetPhoto
+public record Photo
 {
-    private PetPhoto(string path, bool isMain)
+    private Photo(string path, bool isMain)
     {
         Path = path;
         IsMain = isMain;
@@ -14,13 +13,13 @@ public record PetPhoto
     public string Path { get; }
     public bool IsMain { get; }
 
-    public static Result<PetPhoto, Error> Create(string path, bool isMain)
+    public static Result<Photo, Error> Create(string path, bool isMain)
     {
         if (string.IsNullOrWhiteSpace(path))
         {
             return Errors.General.ValueIsInvalid("path");
         }
 
-        return new PetPhoto(path, isMain);
+        return new Photo(path, isMain);
     }
 }

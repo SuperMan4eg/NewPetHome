@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NewPetHome.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240830122922_Initial")]
+    [Migration("20240905111107_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -54,25 +54,9 @@ namespace NewPetHome.Infrastructure.Migrations
                         .HasColumnType("date")
                         .HasColumnName("birth_date");
 
-                    b.Property<string>("Color")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("color");
-
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_date");
-
-                    b.Property<string>("HealthInfo")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("health_info");
-
-                    b.Property<double>("Height")
-                        .HasColumnType("double precision")
-                        .HasColumnName("height");
 
                     b.Property<bool>("IsCastrated")
                         .HasColumnType("boolean")
@@ -82,20 +66,10 @@ namespace NewPetHome.Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("is_vaccinated");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("name");
-
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("status");
-
-                    b.Property<double>("Weight")
-                        .HasColumnType("double precision")
-                        .HasColumnName("weight");
 
                     b.Property<bool>("_isDeleted")
                         .HasColumnType("boolean")
@@ -126,6 +100,17 @@ namespace NewPetHome.Infrastructure.Migrations
                                 .HasColumnName("street");
                         });
 
+                    b.ComplexProperty<Dictionary<string, object>>("Color", "NewPetHome.Domain.VolunteersManagement.Entities.Pet.Color#Color", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(100)
+                                .HasColumnType("character varying(100)")
+                                .HasColumnName("color_value");
+                        });
+
                     b.ComplexProperty<Dictionary<string, object>>("Description", "NewPetHome.Domain.VolunteersManagement.Entities.Pet.Description#Description", b1 =>
                         {
                             b1.IsRequired();
@@ -137,6 +122,37 @@ namespace NewPetHome.Infrastructure.Migrations
                                 .HasColumnName("description_value");
                         });
 
+                    b.ComplexProperty<Dictionary<string, object>>("HealthInfo", "NewPetHome.Domain.VolunteersManagement.Entities.Pet.HealthInfo#HealthInfo", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(100)
+                                .HasColumnType("character varying(100)")
+                                .HasColumnName("health_info_value");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("Height", "NewPetHome.Domain.VolunteersManagement.Entities.Pet.Height#Height", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<double>("Value")
+                                .HasColumnType("double precision")
+                                .HasColumnName("height_value");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("Name", "NewPetHome.Domain.VolunteersManagement.Entities.Pet.Name#Name", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(100)
+                                .HasColumnType("character varying(100)")
+                                .HasColumnName("name_value");
+                        });
+
                     b.ComplexProperty<Dictionary<string, object>>("PhoneNumber", "NewPetHome.Domain.VolunteersManagement.Entities.Pet.PhoneNumber#PhoneNumber", b1 =>
                         {
                             b1.IsRequired();
@@ -146,6 +162,15 @@ namespace NewPetHome.Infrastructure.Migrations
                                 .HasMaxLength(10)
                                 .HasColumnType("character varying(10)")
                                 .HasColumnName("phone_number_value");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("Weight", "NewPetHome.Domain.VolunteersManagement.Entities.Pet.Weight#Weight", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<double>("Value")
+                                .HasColumnType("double precision")
+                                .HasColumnName("weight_value");
                         });
 
                     b.HasKey("Id")
@@ -270,25 +295,25 @@ namespace NewPetHome.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .HasConstraintName("fk_pets_volunteers_volunteer_id");
 
-                    b.OwnsOne("NewPetHome.Domain.VolunteersManagement.ValueObjects.PetDetails", "Details", b1 =>
+                    b.OwnsOne("NewPetHome.Domain.VolunteersManagement.ValueObjects.RequisitesList", "Requisites", b1 =>
                         {
                             b1.Property<Guid>("PetId")
-                                .HasColumnType("uuid")
-                                .HasColumnName("id");
+                                .HasColumnType("uuid");
 
-                            b1.HasKey("PetId");
+                            b1.HasKey("PetId")
+                                .HasName("pk_pets");
 
                             b1.ToTable("pets");
 
-                            b1.ToJson("Details");
+                            b1.ToJson("Requisites");
 
                             b1.WithOwner()
                                 .HasForeignKey("PetId")
-                                .HasConstraintName("fk_pets_pets_id");
+                                .HasConstraintName("fk_pets_pets_pet_id");
 
                             b1.OwnsMany("NewPetHome.Domain.Shared.ValueObjects.Requisite", "Requisites", b2 =>
                                 {
-                                    b2.Property<Guid>("PetDetailsPetId")
+                                    b2.Property<Guid>("RequisitesListPetId")
                                         .HasColumnType("uuid");
 
                                     b2.Property<int>("Id")
@@ -305,19 +330,38 @@ namespace NewPetHome.Infrastructure.Migrations
                                         .HasMaxLength(100)
                                         .HasColumnType("character varying(100)");
 
-                                    b2.HasKey("PetDetailsPetId", "Id")
+                                    b2.HasKey("RequisitesListPetId", "Id")
                                         .HasName("pk_pets");
 
                                     b2.ToTable("pets");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("PetDetailsPetId")
-                                        .HasConstraintName("fk_pets_pets_pet_details_pet_id");
+                                        .HasForeignKey("RequisitesListPetId")
+                                        .HasConstraintName("fk_pets_pets_requisites_list_pet_id");
                                 });
 
-                            b1.OwnsMany("NewPetHome.Domain.VolunteersManagement.ValueObjects.PetPhoto", "Photos", b2 =>
+                            b1.Navigation("Requisites");
+                        });
+
+                    b.OwnsOne("NewPetHome.Domain.VolunteersManagement.ValueObjects.PetPhotos", "Photos", b1 =>
+                        {
+                            b1.Property<Guid>("PetId")
+                                .HasColumnType("uuid")
+                                .HasColumnName("id");
+
+                            b1.HasKey("PetId");
+
+                            b1.ToTable("pets");
+
+                            b1.ToJson("Photos");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PetId")
+                                .HasConstraintName("fk_pets_pets_id");
+
+                            b1.OwnsMany("NewPetHome.Domain.Shared.ValueObjects.Photo", "Photos", b2 =>
                                 {
-                                    b2.Property<Guid>("PetDetailsPetId")
+                                    b2.Property<Guid>("PetPhotosPetId")
                                         .HasColumnType("uuid");
 
                                     b2.Property<int>("Id")
@@ -332,19 +376,17 @@ namespace NewPetHome.Infrastructure.Migrations
                                         .HasMaxLength(100)
                                         .HasColumnType("character varying(100)");
 
-                                    b2.HasKey("PetDetailsPetId", "Id")
+                                    b2.HasKey("PetPhotosPetId", "Id")
                                         .HasName("pk_pets");
 
                                     b2.ToTable("pets");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("PetDetailsPetId")
-                                        .HasConstraintName("fk_pets_pets_pet_details_pet_id");
+                                        .HasForeignKey("PetPhotosPetId")
+                                        .HasConstraintName("fk_pets_pets_pet_photos_pet_id");
                                 });
 
                             b1.Navigation("Photos");
-
-                            b1.Navigation("Requisites");
                         });
 
                     b.OwnsOne("NewPetHome.Domain.VolunteersManagement.ValueObjects.TypeDetails", "TypeDetails", b1 =>
@@ -370,7 +412,10 @@ namespace NewPetHome.Infrastructure.Migrations
                                 .HasConstraintName("fk_pets_pets_id");
                         });
 
-                    b.Navigation("Details")
+                    b.Navigation("Photos")
+                        .IsRequired();
+
+                    b.Navigation("Requisites")
                         .IsRequired();
 
                     b.Navigation("TypeDetails")

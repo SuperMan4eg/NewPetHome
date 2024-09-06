@@ -1,12 +1,16 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using NewPetHome.API.Contracts;
 using NewPetHome.API.Extensions;
 using NewPetHome.Applications.Dtos;
+using NewPetHome.Applications.Volunteers.AddPet;
 using NewPetHome.Applications.Volunteers.Create;
 using NewPetHome.Applications.Volunteers.Delete;
 using NewPetHome.Applications.Volunteers.UpdateMainInfo;
 using NewPetHome.Applications.Volunteers.UpdateRequisites;
 using NewPetHome.Applications.Volunteers.UpdateSocialNetworks;
+using NewPetHome.Domain.Shared.ValueObjects;
+using NewPetHome.Domain.VolunteersManagement.ValueObjects;
 
 namespace NewPetHome.API.Controllers;
 
@@ -91,7 +95,7 @@ public class VolunteersController : ApplicationController
 
         return Ok(result.Value);
     }
-    
+
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult> Delete(
         [FromRoute] Guid id,
@@ -110,6 +114,40 @@ public class VolunteersController : ApplicationController
         if (result.IsFailure)
             return result.Error.ToResponse();
 
+        return Ok(result.Value);
+    }
+
+    [HttpPost("{id:guid}/pet")]
+    public async Task<ActionResult> AddPet(
+        [FromRoute] Guid id,
+        [FromForm] AddPetRequest request,
+        [FromServices] AddPetHandler handler,
+        CancellationToken cancellationToken = default)
+    {
+        var filesDto = request.Files.Select(f => new FileDto(f.FileName));
+
+        var command = new AddPetCommand(
+            id,
+            request.Name,
+            request.Description,
+            request.Color,
+            request.HealthInfo,
+            request.Address,
+            request.Weight,
+            request.Height,
+            request.PhoneNumber,
+            request.IsCastrated,
+            request.BirthDate,
+            request.IsVaccinated,
+            request.Status,
+            filesDto,
+            request.Requisites);
+
+        var result = await handler.Handle(command, cancellationToken);
+        
+        if(result.IsFailure)
+            return result.Error.ToResponse();
+        
         return Ok(result.Value);
     }
 }

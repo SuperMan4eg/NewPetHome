@@ -1,4 +1,5 @@
-﻿using NewPetHome.Domain.Shared;
+﻿using CSharpFunctionalExtensions;
+using NewPetHome.Domain.Shared;
 using NewPetHome.Domain.Shared.ValueObjects;
 using NewPetHome.Domain.VolunteersManagement.Enums;
 using NewPetHome.Domain.VolunteersManagement.IDs;
@@ -6,7 +7,7 @@ using NewPetHome.Domain.VolunteersManagement.ValueObjects;
 
 namespace NewPetHome.Domain.VolunteersManagement.Entities;
 
-public sealed class Volunteer : Entity<VolunteerId>, ISoftDeletable
+public sealed class Volunteer : Shared.Entity<VolunteerId>, ISoftDeletable
 {
     private bool _isDeleted = false;
 
@@ -90,9 +91,10 @@ public sealed class Volunteer : Entity<VolunteerId>, ISoftDeletable
             pet.Restore();
     }
 
-    public void AddPet(Pet pet)
+    public UnitResult<Error> AddPet(Pet pet)
     {
         _pets.Add(pet);
+        return Result.Success<Error>();
     }
 
     public int CountPetsFindHome() => _pets.Count(p => p.Status == PetStatus.FindHome);
