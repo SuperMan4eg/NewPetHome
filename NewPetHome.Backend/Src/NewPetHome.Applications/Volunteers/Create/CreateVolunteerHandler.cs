@@ -1,5 +1,8 @@
 using CSharpFunctionalExtensions;
+using FluentValidation;
 using Microsoft.Extensions.Logging;
+using NewPetHome.Applications.Database;
+using NewPetHome.Applications.Extensions;
 using NewPetHome.Domain.Shared;
 using NewPetHome.Domain.Shared.ValueObjects;
 using NewPetHome.Domain.VolunteersManagement.Entities;
@@ -11,39 +14,55 @@ namespace NewPetHome.Applications.Volunteers.Create;
 public class CreateVolunteerHandler
 {
     private readonly IVolunteersRepository _volunteersRepository;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IValidator<CreateVolunteerCommand> _validator;
     private readonly ILogger<CreateVolunteerHandler> _logger;
 
     public CreateVolunteerHandler(
         IVolunteersRepository volunteersRepository,
+        IUnitOfWork unitOfWork,
+        IValidator<CreateVolunteerCommand> validator,
         ILogger<CreateVolunteerHandler> logger)
     {
         _volunteersRepository = volunteersRepository;
+        _unitOfWork = unitOfWork;
+        _validator = validator;
         _logger = logger;
     }
 
-    public async Task<Result<VolunteerId, Error>> Handle(
-        CreateVolunteerRequest request,
+    public async Task<Result<Guid, ErrorList>> Handle(
+        CreateVolunteerCommand command,
         CancellationToken cancellationToken = default)
     {
+        var validationResult = await _validator.ValidateAsync(command, cancellationToken);
+        if (validationResult.IsValid == false)
+            return validationResult.ToErrorList();
+
+        var volunteer = InitVolunteer(command);
+
+        await _volunteersRepository.Add(volunteer, cancellationToken);
+
+        await _unitOfWork.SaveChanges(cancellationToken);
+
+        _logger.LogInformation("Volunteer created with id: {VolunteerId}.", volunteer.Id.Value);
+
+        return volunteer.Id.Value;
+    }
+
+    private Volunteer InitVolunteer(CreateVolunteerCommand command)
+    {
         var volunteerId = VolunteerId.NewVolunteerId();
-
-        var fullName = FullName.Create(request.FullName.FirstName, request.FullName.LastName).Value;
-
-        var description = Description.Create(request.Description).Value;
-
-        var email = Email.Create(request.Email).Value;
-
-        var experience = Experience.Create(request.Experience).Value;
-
-        var phoneNumber = PhoneNumber.Create(request.PhoneNumber).Value;
-
-        var requisites = new RequisitesList(request.Requisites.Select(r =>
+        var fullName = FullName.Create(command.FullName.FirstName, command.FullName.LastName).Value;
+        var description = Description.Create(command.Description).Value;
+        var email = Email.Create(command.Email).Value;
+        var experience = Experience.Create(command.Experience).Value;
+        var phoneNumber = PhoneNumber.Create(command.PhoneNumber).Value;
+        var requisites = new ValueObjectList<Requisite>(command.Requisites.Select(r =>
             Requisite.Create(r.Name, r.Description).Value));
-
-        var socialNetworks = new SocialNetworks(request.SocialNetworks.Select(r =>
+        var socialNetworks = new ValueObjectList<SocialNetwork>(command.SocialNetworks.Select(r =>
             SocialNetwork.Create(r.Name, r.Url).Value));
 
-        var volunteerResult = new Volunteer(
+        return new Volunteer(
             volunteerId,
             fullName,
             description,
@@ -52,11 +71,5 @@ public class CreateVolunteerHandler
             phoneNumber,
             requisites,
             socialNetworks);
-
-        await _volunteersRepository.Add(volunteerResult, cancellationToken);
-
-        _logger.LogInformation("Volunteer created with id: {VolunteerId}.", volunteerId);
-
-        return volunteerResult.Id;
     }
 }

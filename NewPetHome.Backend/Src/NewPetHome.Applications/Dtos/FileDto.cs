@@ -1,3 +1,3 @@
 namespace NewPetHome.Applications.Dtos;
 
-public record FileDto(string FileName);
+public record FileDto(Stream Stream, string FileName, string ContentType);

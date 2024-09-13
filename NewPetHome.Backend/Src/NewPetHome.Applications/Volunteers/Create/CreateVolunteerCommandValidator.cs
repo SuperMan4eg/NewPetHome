@@ -5,9 +5,9 @@ using NewPetHome.Domain.VolunteersManagement.ValueObjects;
 
 namespace NewPetHome.Applications.Volunteers.Create;
 
-public class CreateVolunteerRequestValidator : AbstractValidator<CreateVolunteerRequest>
+public class CreateVolunteerCommandValidator : AbstractValidator<CreateVolunteerCommand>
 {
-    public CreateVolunteerRequestValidator()
+    public CreateVolunteerCommandValidator()
     {
         RuleFor(c => c.FullName)
             .MustBeValueObject(x => FullName.Create(x.FirstName, x.LastName));

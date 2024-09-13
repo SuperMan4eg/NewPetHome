@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NewPetHome.Domain.Shared;
+using NewPetHome.Domain.Shared.ValueObjects;
 using NewPetHome.Domain.SpeciesManagement.IDs;
 using NewPetHome.Domain.VolunteersManagement.Entities;
 using NewPetHome.Domain.VolunteersManagement.Enums;
@@ -120,10 +121,13 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
         builder.OwnsOne(p => p.Photos, pb =>
         {
             pb.ToJson();
-            
-            pb.OwnsMany(p => p.Photos, phb =>
+
+            pb.OwnsMany(p => p.Values, phb =>
             {
                 phb.Property(d => d.Path)
+                    .HasConversion(
+                        p => p.Path,
+                        value => FilePath.Create(value).Value)
                     .IsRequired()
                     .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
 
@@ -131,12 +135,12 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
                     .IsRequired();
             });
         });
-        
+
         builder.OwnsOne(p => p.Requisites, rb =>
         {
             rb.ToJson();
-            
-            rb.OwnsMany(r => r.Requisites, reb =>
+
+            rb.OwnsMany(r => r.Values, reb =>
             {
                 reb.Property(d => d.Name)
                     .IsRequired()
@@ -147,7 +151,7 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
                     .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
             });
         });
-        
+
         builder.Property<bool>("_isDeleted")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasColumnName("is_deleted");

@@ -26,13 +26,13 @@ public class Pet : Entity<PetId>, ISoftDeletable
         Height height,
         PhoneNumber phoneNumber,
         bool isCastrated,
-        DateOnly birthDate,
+        DateTime birthDate,
         bool isVaccinated,
-        PetStatus status,
-        PetPhotos photos,
-        RequisitesList requisites) : base(id)
+        PetStatus? status,
+        ValueObjectList<Photo>? photos,
+        ValueObjectList<Requisite> requisites) : base(id)
     {
-        Name =  name;
+        Name = name;
         Description = description;
         TypeDetails = typeDetails;
         Color = color;
@@ -45,8 +45,8 @@ public class Pet : Entity<PetId>, ISoftDeletable
         BirthDate = birthDate;
         IsVaccinated = isVaccinated;
         Status = status;
-        CreatedDate = DateTime.Now;
-        Photos = photos;
+        CreatedDate = DateTime.Now.ToUniversalTime();
+        Photos = photos ?? new ValueObjectList<Photo>([]);
         Requisites = requisites;
     }
 
@@ -57,15 +57,21 @@ public class Pet : Entity<PetId>, ISoftDeletable
     public HealthInfo HealthInfo { get; private set; } = default!;
     public Address Address { get; private set; } = default!;
     public Weight Weight { get; private set; } = default!;
-    public Height Height { get; private set; }= default!;
+    public Height Height { get; private set; } = default!;
     public PhoneNumber PhoneNumber { get; private set; } = default!;
     public bool IsCastrated { get; private set; }
-    public DateOnly BirthDate { get; private set; }
+    public DateTime BirthDate { get; private set; }
     public bool IsVaccinated { get; private set; }
-    public PetStatus Status { get; private set; }
+    public PetStatus? Status { get; private set; }
     public DateTime CreatedDate { get; private set; }
-    public PetPhotos Photos { get; private set; } = default!;
-    public RequisitesList Requisites { get; private set; } = default!;
+    public ValueObjectList<Photo> Photos { get; private set; } = default!;
+    public ValueObjectList<Requisite> Requisites { get; private set; }
+
+    public void UpdatePhotos(ValueObjectList<Photo> photos) =>
+        Photos = photos;
+
+    public void UpdateRequisites(ValueObjectList<Requisite> requisites) =>
+        Requisites = requisites;
 
     public void Delete()
     {

@@ -6,6 +6,7 @@ using NewPetHome.Applications.Volunteers.Delete;
 using NewPetHome.Applications.Volunteers.UpdateMainInfo;
 using NewPetHome.Applications.Volunteers.UpdateRequisites;
 using NewPetHome.Applications.Volunteers.UpdateSocialNetworks;
+using NewPetHome.Applications.Volunteers.UploadFilesToPet;
 
 namespace NewPetHome.Applications;
 
@@ -19,6 +20,7 @@ public static class Inject
         services.AddScoped<UpdateSocialNetworksHandler>();
         services.AddScoped<DeleteVolunteerHandler>();
         services.AddScoped<AddPetHandler>();
+        services.AddScoped<UploadFilesToPetHandler>();
 
         services.AddValidatorsFromAssembly(typeof(Inject).Assembly);
 

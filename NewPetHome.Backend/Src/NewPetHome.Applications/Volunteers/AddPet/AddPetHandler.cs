@@ -1,5 +1,9 @@
 using CSharpFunctionalExtensions;
-using NewPetHome.Applications.Providers;
+using FluentValidation;
+using Microsoft.Extensions.Logging;
+using NewPetHome.Applications.Database;
+using NewPetHome.Applications.Extensions;
+using NewPetHome.Applications.FileProvider;
 using NewPetHome.Domain.Shared;
 using NewPetHome.Domain.Shared.ValueObjects;
 using NewPetHome.Domain.SpeciesManagement.IDs;
@@ -12,27 +16,52 @@ namespace NewPetHome.Applications.Volunteers.AddPet;
 
 public class AddPetHandler
 {
+    private const string BUCKET_NAME = "photos";
     private readonly IFileProvider _fileProvider;
     private readonly IVolunteersRepository _volunteersRepository;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IValidator<AddPetCommand> _validator;
+    private readonly ILogger<AddPetHandler> _logger;
 
     public AddPetHandler(
         IFileProvider fileProvider,
-        IVolunteersRepository volunteersRepository)
+        IVolunteersRepository volunteersRepository,
+        IUnitOfWork unitOfWork,
+        IValidator<AddPetCommand> validator,
+        ILogger<AddPetHandler> logger)
     {
         _fileProvider = fileProvider;
         _volunteersRepository = volunteersRepository;
+        _unitOfWork = unitOfWork;
+        _validator = validator;
+        _logger = logger;
     }
 
-    public async Task<Result<Guid, Error>> Handle(
+    public async Task<Result<Guid, ErrorList>> Handle(
         AddPetCommand command,
         CancellationToken cancellationToken = default)
     {
-        var volunteerResult = await _volunteersRepository.GetById(
-            VolunteerId.Create(command.VolunteerId), cancellationToken);
+        var validationResult = await _validator.ValidateAsync(command, cancellationToken);
+        if (validationResult.IsValid == false)
+            return validationResult.ToErrorList();
 
+        var volunteerResult = await _volunteersRepository
+            .GetById(VolunteerId.Create(command.VolunteerId), cancellationToken);
         if (volunteerResult.IsFailure)
-            return volunteerResult.Error;
+            return volunteerResult.Error.ToErrorList();
 
+        var pet = InitPet(command);
+        volunteerResult.Value.AddPet(pet);
+
+        await _unitOfWork.SaveChanges(cancellationToken);
+
+        _logger.LogInformation("Pet added with id: {PetId}.", pet.Id.Value);
+
+        return pet.Id.Value;
+    }
+
+    private Pet InitPet(AddPetCommand command)
+    {
         var petId = PetId.NewPetId();
         var name = Name.Create(command.Name).Value;
         var description = Description.Create(command.Description).Value;
@@ -44,15 +73,13 @@ public class AddPetHandler
         var height = Height.Create(command.Height).Value;
         var phoneNumber = PhoneNumber.Create(command.PhoneNumber).Value;
         var isCastrated = command.IsCastrated;
-        var birthDate = command.BirthDate;
+        var birthDate = command.BirthDate.ToUniversalTime();
         var isVaccinated = command.IsVaccinated;
         var status = Enum.Parse<PetStatus>(command.Status);
-        var requisites = new RequisitesList(command.Requisites.Select(r =>
+        var requisites = new ValueObjectList<Requisite>(command.Requisites.Select(r =>
             Requisite.Create(r.Name, r.Description).Value));
-        var photos = command.Files
-            .Select(f => Photo.Create(f.FileName, false).Value);
 
-        var pet = new Pet(
+        return new Pet(
             petId,
             name,
             description,
@@ -67,13 +94,7 @@ public class AddPetHandler
             birthDate,
             isVaccinated,
             status,
-            new PetPhotos(photos),
+            null,
             requisites);
-
-        volunteerResult.Value.AddPet(pet);
-
-        await _volunteersRepository.Save(volunteerResult.Value, cancellationToken);
-
-        return petId.Value;
     }
 }

@@ -1,8 +1,10 @@
 using CSharpFunctionalExtensions;
+using FluentValidation;
 using Microsoft.Extensions.Logging;
+using NewPetHome.Applications.Database;
+using NewPetHome.Applications.Extensions;
 using NewPetHome.Domain.Shared;
 using NewPetHome.Domain.Shared.ValueObjects;
-using NewPetHome.Domain.VolunteersManagement.ValueObjects;
 
 namespace NewPetHome.Applications.Volunteers.UpdateSocialNetworks;
 
@@ -10,31 +12,43 @@ public class UpdateSocialNetworksHandler
 {
     private readonly ILogger<UpdateSocialNetworksHandler> _logger;
     private readonly IVolunteersRepository _volunteersRepository;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IValidator<UpdateSocialNetworksCommand> _validator;
 
     public UpdateSocialNetworksHandler(
         IVolunteersRepository volunteersRepository,
+        IUnitOfWork unitOfWork,
+        IValidator<UpdateSocialNetworksCommand> validator,
         ILogger<UpdateSocialNetworksHandler> logger)
     {
         _volunteersRepository = volunteersRepository;
+        _unitOfWork = unitOfWork;
+        _validator = validator;
         _logger = logger;
     }
 
-    public async Task<Result<Guid, Error>> Handle(
-        UpdateSocialNetworksRequest request,
+    public async Task<Result<Guid, ErrorList>> Handle(
+        UpdateSocialNetworksCommand command,
         CancellationToken cancellationToken = default)
     {
-        var volunteerResult = await _volunteersRepository.GetById(request.VolunteerId, cancellationToken);
+        var validationResult = await _validator.ValidateAsync(command, cancellationToken);
+        if (validationResult.IsValid == false)
+            return validationResult.ToErrorList();
+        
+        var volunteerResult = await _volunteersRepository.GetById(command.VolunteerId, cancellationToken);
 
         if (volunteerResult.IsFailure)
-            return volunteerResult.Error;
+            return volunteerResult.Error.ToErrorList();
 
-        var socialNetworks = new SocialNetworks(request.Dto.SocialNetworks.Select(r =>
+        var socialNetworks = new ValueObjectList<SocialNetwork>(command.SocialNetworks.Select(r =>
             SocialNetwork.Create(r.Name, r.Url).Value));
 
         volunteerResult.Value.UpdateSocialNetworks(socialNetworks);
 
-        _logger.LogInformation("Volunteer social networks update with id: {VolunteerId}.", request.VolunteerId);
+        await _unitOfWork.SaveChanges(cancellationToken);
 
-        return await _volunteersRepository.Save(volunteerResult.Value, cancellationToken);
+        _logger.LogInformation("Volunteer social networks update with id: {VolunteerId}.", command.VolunteerId);
+
+        return volunteerResult.Value.Id.Value;
     }
 }

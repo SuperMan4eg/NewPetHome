@@ -1,7 +1,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
-using NewPetHome.Applications.Providers;
+using NewPetHome.Applications.Database;
+using NewPetHome.Applications.FileProvider;
 using NewPetHome.Applications.Volunteers;
 using NewPetHome.Infrastructure.Options;
 using NewPetHome.Infrastructure.Providers;
@@ -16,6 +17,7 @@ public static class Inject
     {
         services.AddScoped<ApplicationDbContext>();
         services.AddScoped<IVolunteersRepository, VolunteersRepository>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddMinio(configuration);
 

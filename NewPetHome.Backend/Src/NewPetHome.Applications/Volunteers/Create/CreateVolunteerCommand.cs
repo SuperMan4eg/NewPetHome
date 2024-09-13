@@ -2,7 +2,7 @@ using NewPetHome.Applications.Dtos;
 
 namespace NewPetHome.Applications.Volunteers.Create;
 
-public record CreateVolunteerRequest(
+public record CreateVolunteerCommand(
     FullNameDto FullName,
     string Description,
     string Email,
