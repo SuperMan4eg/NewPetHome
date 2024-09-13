@@ -1,6 +1,8 @@
 using CSharpFunctionalExtensions;
+using FluentValidation;
 using Microsoft.Extensions.Logging;
-using NewPetHome.Applications.Volunteers.Create;
+using NewPetHome.Applications.Database;
+using NewPetHome.Applications.Extensions;
 using NewPetHome.Domain.Shared;
 using NewPetHome.Domain.Shared.ValueObjects;
 using NewPetHome.Domain.VolunteersManagement.ValueObjects;
@@ -11,29 +13,38 @@ public class UpdateMainInfoHandler
 {
     private readonly ILogger<UpdateMainInfoHandler> _logger;
     private readonly IVolunteersRepository _volunteersRepository;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IValidator<UpdateMainInfoCommand> _validator;
 
     public UpdateMainInfoHandler(
         IVolunteersRepository volunteersRepository,
+        IUnitOfWork unitOfWork,
+        IValidator<UpdateMainInfoCommand> validator,
         ILogger<UpdateMainInfoHandler> logger)
     {
         _volunteersRepository = volunteersRepository;
+        _unitOfWork = unitOfWork;
+        _validator = validator;
         _logger = logger;
     }
 
-    public async Task<Result<Guid, Error>> Handle(
-        UpdateMainInfoRequest request,
+    public async Task<Result<Guid, ErrorList>> Handle(
+        UpdateMainInfoCommand command,
         CancellationToken cancellationToken = default)
     {
-        var volunteerResult = await _volunteersRepository.GetById(request.VolunteerId, cancellationToken);
+        var validationResult = await _validator.ValidateAsync(command, cancellationToken);
+        if (validationResult.IsValid == false)
+            return validationResult.ToErrorList();
 
+        var volunteerResult = await _volunteersRepository.GetById(command.VolunteerId, cancellationToken);
         if (volunteerResult.IsFailure)
-            return volunteerResult.Error;
+            return volunteerResult.Error.ToErrorList();
 
-        var fullName = FullName.Create(request.Dto.FullName.FirstName, request.Dto.FullName.LastName).Value;
-        var description = Description.Create(request.Dto.Description).Value;
-        var email = Email.Create(request.Dto.Email).Value;
-        var experience = Experience.Create(request.Dto.Experience).Value;
-        var phoneNumber = PhoneNumber.Create(request.Dto.PhoneNumber).Value;
+        var fullName = FullName.Create(command.FullName.FirstName, command.FullName.LastName).Value;
+        var description = Description.Create(command.Description).Value;
+        var email = Email.Create(command.Email).Value;
+        var experience = Experience.Create(command.Experience).Value;
+        var phoneNumber = PhoneNumber.Create(command.PhoneNumber).Value;
 
         volunteerResult.Value.UpdateMainInfo(
             fullName,
@@ -42,8 +53,10 @@ public class UpdateMainInfoHandler
             experience,
             phoneNumber);
 
-        _logger.LogInformation("Volunteer main info update with id: {VolunteerId}.", request.VolunteerId);
-        
-        return await _volunteersRepository.Save(volunteerResult.Value, cancellationToken);
+        await _unitOfWork.SaveChanges(cancellationToken);
+
+        _logger.LogInformation("Volunteer main info update with id: {VolunteerId}.", command.VolunteerId);
+
+        return volunteerResult.Value.Id.Value;
     }
 }

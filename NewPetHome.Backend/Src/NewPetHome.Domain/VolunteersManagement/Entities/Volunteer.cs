@@ -1,4 +1,5 @@
-﻿using NewPetHome.Domain.Shared;
+﻿using CSharpFunctionalExtensions;
+using NewPetHome.Domain.Shared;
 using NewPetHome.Domain.Shared.ValueObjects;
 using NewPetHome.Domain.VolunteersManagement.Enums;
 using NewPetHome.Domain.VolunteersManagement.IDs;
@@ -6,7 +7,7 @@ using NewPetHome.Domain.VolunteersManagement.ValueObjects;
 
 namespace NewPetHome.Domain.VolunteersManagement.Entities;
 
-public sealed class Volunteer : Entity<VolunteerId>, ISoftDeletable
+public sealed class Volunteer : Shared.Entity<VolunteerId>, ISoftDeletable
 {
     private bool _isDeleted = false;
 
@@ -23,8 +24,8 @@ public sealed class Volunteer : Entity<VolunteerId>, ISoftDeletable
         Email email,
         Experience experience,
         PhoneNumber phoneNumber,
-        RequisitesList requisites,
-        SocialNetworks socialNetworks) :
+        ValueObjectList<Requisite> requisites,
+        ValueObjectList<SocialNetwork> socialNetworks) :
         base(id)
     {
         FullName = fullName;
@@ -42,8 +43,17 @@ public sealed class Volunteer : Entity<VolunteerId>, ISoftDeletable
     public Experience Experience { get; private set; } = default!;
     public PhoneNumber PhoneNumber { get; private set; } = default!;
     public IReadOnlyList<Pet> Pets => _pets;
-    public RequisitesList Requisites { get; private set; } = default!;
-    public SocialNetworks SocialNetworks { get; private set; } = default!;
+    public ValueObjectList<Requisite> Requisites { get; private set; }
+    public ValueObjectList<SocialNetwork> SocialNetworks { get; private set; }
+
+    public Result<Pet, Error> GetPetById(PetId petId)
+    {
+        var pet = _pets.FirstOrDefault(p => p.Id == petId);
+        if(pet is null)
+            return Errors.General.NotFound(petId.Value);
+        
+        return pet;
+    }
 
     public void UpdateMainInfo(
         FullName fullName,
@@ -60,12 +70,12 @@ public sealed class Volunteer : Entity<VolunteerId>, ISoftDeletable
         PhoneNumber = phoneNumber;
     }
 
-    public void UpdateRequisites(RequisitesList requisites)
+    public void UpdateRequisites(ValueObjectList<Requisite> requisites)
     {
         Requisites = requisites;
     }
 
-    public void UpdateSocialNetworks(SocialNetworks socialNetworks)
+    public void UpdateSocialNetworks(ValueObjectList<SocialNetwork> socialNetworks)
     {
         SocialNetworks = socialNetworks;
     }
@@ -90,9 +100,10 @@ public sealed class Volunteer : Entity<VolunteerId>, ISoftDeletable
             pet.Restore();
     }
 
-    public void AddPet(Pet pet)
+    public UnitResult<Error> AddPet(Pet pet)
     {
         _pets.Add(pet);
+        return Result.Success<Error>();
     }
 
     public int CountPetsFindHome() => _pets.Count(p => p.Status == PetStatus.FindHome);

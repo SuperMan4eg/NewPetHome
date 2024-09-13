@@ -22,28 +22,23 @@ public class VolunteersRepository : IVolunteersRepository
     {
         await _dbContext.Volunteer.AddAsync(volunteer, cancellationToken);
 
-        await _dbContext.SaveChangesAsync(cancellationToken);
-
         return volunteer.Id;
     }
 
-    public async Task<Guid> Save(
+    public Guid Save(
         Volunteer volunteer,
         CancellationToken cancellationToken = default)
     {
         _dbContext.Volunteer.Attach(volunteer);
-        await _dbContext.SaveChangesAsync(cancellationToken);
 
-        return volunteer.Id;
+        return volunteer.Id.Value;
     }
 
-    public async Task<Guid> Delete(Volunteer volunteer, CancellationToken cancellationToken = default)
+    public Guid Delete(Volunteer volunteer, CancellationToken cancellationToken = default)
     {
         _dbContext.Volunteer.Remove(volunteer);
 
-        await _dbContext.SaveChangesAsync(cancellationToken);
-
-        return volunteer.Id;
+        return volunteer.Id.Value;
     }
 
     public async Task<Result<Volunteer, Error>> GetById(

@@ -14,21 +14,64 @@ public class Pet : Entity<PetId>, ISoftDeletable
     {
     }
 
-    public string Name { get; private set; } = default!;
+    public Pet(
+        PetId id,
+        Name name,
+        Description description,
+        TypeDetails typeDetails,
+        Color color,
+        HealthInfo healthInfo,
+        Address address,
+        Weight weight,
+        Height height,
+        PhoneNumber phoneNumber,
+        bool isCastrated,
+        DateTime birthDate,
+        bool isVaccinated,
+        PetStatus? status,
+        ValueObjectList<Photo>? photos,
+        ValueObjectList<Requisite> requisites) : base(id)
+    {
+        Name = name;
+        Description = description;
+        TypeDetails = typeDetails;
+        Color = color;
+        HealthInfo = healthInfo;
+        Address = address;
+        Weight = weight;
+        Height = height;
+        PhoneNumber = phoneNumber;
+        IsCastrated = isCastrated;
+        BirthDate = birthDate;
+        IsVaccinated = isVaccinated;
+        Status = status;
+        CreatedDate = DateTime.Now.ToUniversalTime();
+        Photos = photos ?? new ValueObjectList<Photo>([]);
+        Requisites = requisites;
+    }
+
+    public Name Name { get; private set; } = default!;
     public Description Description { get; private set; } = default!;
     public TypeDetails TypeDetails { get; private set; } = default!;
-    public string Color { get; private set; } = default!;
-    public string HealthInfo { get; private set; } = default!;
+    public Color Color { get; private set; } = default!;
+    public HealthInfo HealthInfo { get; private set; } = default!;
     public Address Address { get; private set; } = default!;
-    public double Weight { get; private set; }
-    public double Height { get; private set; }
+    public Weight Weight { get; private set; } = default!;
+    public Height Height { get; private set; } = default!;
     public PhoneNumber PhoneNumber { get; private set; } = default!;
     public bool IsCastrated { get; private set; }
-    public DateOnly BirthDate { get; private set; }
+    public DateTime BirthDate { get; private set; }
     public bool IsVaccinated { get; private set; }
-    public PetStatus Status { get; private set; }
+    public PetStatus? Status { get; private set; }
     public DateTime CreatedDate { get; private set; }
-    public PetDetails Details { get; private set; } = default!;
+    public ValueObjectList<Photo> Photos { get; private set; } = default!;
+    public ValueObjectList<Requisite> Requisites { get; private set; }
+
+    public void UpdatePhotos(ValueObjectList<Photo> photos) =>
+        Photos = photos;
+
+    public void UpdateRequisites(ValueObjectList<Requisite> requisites) =>
+        Requisites = requisites;
 
     public void Delete()
     {

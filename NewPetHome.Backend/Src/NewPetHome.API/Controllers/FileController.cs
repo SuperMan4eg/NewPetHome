@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using NewPetHome.API.Extensions;
 using NewPetHome.Applications.FileProvider;
-using NewPetHome.Applications.Providers;
 
 namespace NewPetHome.API.Controllers;
 
@@ -14,27 +13,6 @@ public class FileController : ApplicationController
     public FileController(IFileProvider fileProvider)
     {
         _fileProvider = fileProvider;
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> CreateFile(IFormFile file, CancellationToken cancellationToken)
-    {
-        await using var stream = file.OpenReadStream();
-
-        var filename = Guid.NewGuid().ToString();
-
-        var fileMetaData = new FileMetaData(BUCKET_NAME, filename);
-
-        var fileData = new FileData(stream, fileMetaData);
-
-        var result = await _fileProvider.UploadFile(fileData, cancellationToken);
-
-        if (result.IsFailure)
-        {
-            return result.Error.ToResponse();
-        }
-
-        return Ok(result.Value);
     }
 
     [HttpDelete("{fileName:guid}")]
