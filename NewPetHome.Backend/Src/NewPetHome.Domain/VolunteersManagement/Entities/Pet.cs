@@ -1,4 +1,5 @@
-﻿using NewPetHome.Domain.Shared;
+﻿using CSharpFunctionalExtensions;
+using NewPetHome.Domain.Shared;
 using NewPetHome.Domain.Shared.ValueObjects;
 using NewPetHome.Domain.VolunteersManagement.Enums;
 using NewPetHome.Domain.VolunteersManagement.IDs;
@@ -6,7 +7,7 @@ using NewPetHome.Domain.VolunteersManagement.ValueObjects;
 
 namespace NewPetHome.Domain.VolunteersManagement.Entities;
 
-public class Pet : Entity<PetId>, ISoftDeletable
+public class Pet : Shared.Entity<PetId>, ISoftDeletable
 {
     private bool _isDeleted = false;
 
@@ -52,6 +53,7 @@ public class Pet : Entity<PetId>, ISoftDeletable
 
     public Name Name { get; private set; } = default!;
     public Description Description { get; private set; } = default!;
+    public Position Position { get; private set; }
     public TypeDetails TypeDetails { get; private set; } = default!;
     public Color Color { get; private set; } = default!;
     public HealthInfo HealthInfo { get; private set; } = default!;
@@ -73,6 +75,9 @@ public class Pet : Entity<PetId>, ISoftDeletable
     public void UpdateRequisites(ValueObjectList<Requisite> requisites) =>
         Requisites = requisites;
 
+    public void SetPosition(Position position) =>
+        Position = position;
+
     public void Delete()
     {
         if (_isDeleted)
@@ -87,5 +92,27 @@ public class Pet : Entity<PetId>, ISoftDeletable
             return;
 
         _isDeleted = false;
+    }
+
+    public UnitResult<Error> MoveForward()
+    {
+        var newPosition = Position.Forward();
+        if (newPosition.IsFailure)
+            return newPosition.Error;
+
+        Position = newPosition.Value;
+        
+        return Result.Success<Error>();
+    }
+    
+    public UnitResult<Error> MoveBack()
+    {
+        var newPosition = Position.Back();
+        if (newPosition.IsFailure)
+            return newPosition.Error;
+
+        Position = newPosition.Value;
+        
+        return Result.Success<Error>();
     }
 }
