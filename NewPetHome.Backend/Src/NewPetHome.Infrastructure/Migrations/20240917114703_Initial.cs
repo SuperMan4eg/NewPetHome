@@ -85,6 +85,7 @@ namespace NewPetHome.Infrastructure.Migrations
                     height_value = table.Column<double>(type: "double precision", nullable: false),
                     name_value = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     phone_number_value = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
+                    position_value = table.Column<int>(type: "integer", nullable: false),
                     weight_value = table.Column<double>(type: "double precision", nullable: false),
                     Photos = table.Column<string>(type: "jsonb", nullable: false),
                     Requisites = table.Column<string>(type: "jsonb", nullable: false)

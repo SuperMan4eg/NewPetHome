@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NewPetHome.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240913074350_Initial")]
+    [Migration("20240917114703_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -161,6 +161,15 @@ namespace NewPetHome.Infrastructure.Migrations
                                 .HasMaxLength(10)
                                 .HasColumnType("character varying(10)")
                                 .HasColumnName("phone_number_value");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("Position", "NewPetHome.Domain.VolunteersManagement.Entities.Pet.Position#Position", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<int>("Value")
+                                .HasColumnType("integer")
+                                .HasColumnName("position_value");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("Weight", "NewPetHome.Domain.VolunteersManagement.Entities.Pet.Weight#Weight", b1 =>
