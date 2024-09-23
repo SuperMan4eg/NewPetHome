@@ -1,4 +1,3 @@
-using CSharpFunctionalExtensions;
 using FluentAssertions;
 using FluentValidation;
 using FluentValidation.Results;
@@ -6,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NewPetHome.Applications.Database;
 using NewPetHome.Applications.Dtos;
-using NewPetHome.Applications.FileProvider;
 using NewPetHome.Applications.Volunteers;
 using NewPetHome.Applications.Volunteers.AddPet;
 using NewPetHome.Domain.Shared;

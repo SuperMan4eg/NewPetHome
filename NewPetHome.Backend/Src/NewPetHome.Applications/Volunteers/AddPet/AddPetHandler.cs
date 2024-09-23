@@ -3,7 +3,6 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using NewPetHome.Applications.Database;
 using NewPetHome.Applications.Extensions;
-using NewPetHome.Applications.FileProvider;
 using NewPetHome.Domain.Shared;
 using NewPetHome.Domain.Shared.ValueObjects;
 using NewPetHome.Domain.SpeciesManagement.IDs;
@@ -16,21 +15,17 @@ namespace NewPetHome.Applications.Volunteers.AddPet;
 
 public class AddPetHandler
 {
-    private const string BUCKET_NAME = "photos";
-    private readonly IFileProvider _fileProvider;
     private readonly IVolunteersRepository _volunteersRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<AddPetCommand> _validator;
     private readonly ILogger<AddPetHandler> _logger;
 
     public AddPetHandler(
-        IFileProvider fileProvider,
         IVolunteersRepository volunteersRepository,
         IUnitOfWork unitOfWork,
         IValidator<AddPetCommand> validator,
         ILogger<AddPetHandler> logger)
     {
-        _fileProvider = fileProvider;
         _volunteersRepository = volunteersRepository;
         _unitOfWork = unitOfWork;
         _validator = validator;

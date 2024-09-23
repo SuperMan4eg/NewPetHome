@@ -12,6 +12,7 @@ public record Photo
 
     public FilePath Path { get; }
     public bool IsMain { get; }
+    public bool IsUploaded { get; } = false;
 
     public static Result<Photo, Error> Create(FilePath path, bool isMain)
     {
