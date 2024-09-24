@@ -3,10 +3,12 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using NewPetHome.Applications.Database;
 using NewPetHome.Applications.Extensions;
-using NewPetHome.Applications.FileProvider;
+using NewPetHome.Applications.Files;
+using NewPetHome.Applications.Messaging;
 using NewPetHome.Domain.Shared;
 using NewPetHome.Domain.Shared.ValueObjects;
 using NewPetHome.Domain.VolunteersManagement.IDs;
+using FileInfo = NewPetHome.Applications.Files.FileInfo;
 
 namespace NewPetHome.Applications.Volunteers.UploadFilesToPet;
 
@@ -18,6 +20,7 @@ public class UploadFilesToPetHandler
     private readonly IVolunteersRepository _volunteersRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<UploadFilesToPetCommand> _validator;
+    private readonly IMessageQueue<IEnumerable<FileInfo>> _messageQueue;
     private readonly ILogger<UploadFilesToPetHandler> _logger;
 
     public UploadFilesToPetHandler(
@@ -25,12 +28,14 @@ public class UploadFilesToPetHandler
         IVolunteersRepository volunteersRepository,
         IUnitOfWork unitOfWork,
         IValidator<UploadFilesToPetCommand> validator,
+        IMessageQueue<IEnumerable<FileInfo>> messageQueue,
         ILogger<UploadFilesToPetHandler> logger)
     {
         _fileProvider = fileProvider;
         _volunteersRepository = volunteersRepository;
         _unitOfWork = unitOfWork;
         _validator = validator;
+        _messageQueue = messageQueue;
         _logger = logger;
     }
 
@@ -62,14 +67,19 @@ public class UploadFilesToPetHandler
             if (filePath.IsFailure)
                 return filePath.Error.ToErrorList();
 
-            var fileData = new FileData(file.Content, filePath.Value, BUCKET_NAME);
+            var fileInfo = new FileInfo(filePath.Value, BUCKET_NAME);
+            var fileData = new FileData(file.Content, fileInfo);
 
             filesData.Add(fileData);
         }
 
         var filePathsResult = await _fileProvider.UploadFiles(filesData, cancellationToken);
         if (filePathsResult.IsFailure)
+        {
+            await _messageQueue.WriteAsync(filesData.Select(f => f.Info), cancellationToken);
+
             return filePathsResult.Error.ToErrorList();
+        }
 
         var petPhotos = filePathsResult.Value
             .Select(f => Photo.Create(f, false).Value)

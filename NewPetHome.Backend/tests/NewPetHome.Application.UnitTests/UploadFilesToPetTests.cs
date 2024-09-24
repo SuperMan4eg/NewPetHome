@@ -6,7 +6,8 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NewPetHome.Applications.Database;
 using NewPetHome.Applications.Dtos;
-using NewPetHome.Applications.FileProvider;
+using NewPetHome.Applications.Files;
+using NewPetHome.Applications.Messaging;
 using NewPetHome.Applications.Volunteers;
 using NewPetHome.Applications.Volunteers.UploadFilesToPet;
 using NewPetHome.Domain.Shared;
@@ -16,6 +17,7 @@ using NewPetHome.Domain.VolunteersManagement.Entities;
 using NewPetHome.Domain.VolunteersManagement.Enums;
 using NewPetHome.Domain.VolunteersManagement.IDs;
 using NewPetHome.Domain.VolunteersManagement.ValueObjects;
+using FileInfo = NewPetHome.Applications.Files.FileInfo;
 
 namespace NewPetHome.Application.UnitTests;
 
@@ -25,6 +27,7 @@ public class UploadFilesToPetTests
     private readonly Mock<IVolunteersRepository> _volunteersRepositoryMock;
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly Mock<IValidator<UploadFilesToPetCommand>> _validatorMock;
+    private readonly Mock<IMessageQueue<IEnumerable<FileInfo>>> _messageQueueMock;
     private readonly Mock<ILogger<UploadFilesToPetHandler>> _loggerMock;
     private readonly UploadFilesToPetHandler _handler;
     private readonly CancellationToken _ct;
@@ -35,6 +38,7 @@ public class UploadFilesToPetTests
         _volunteersRepositoryMock = new Mock<IVolunteersRepository>();
         _unitOfWorkMock = new Mock<IUnitOfWork>();
         _validatorMock = new Mock<IValidator<UploadFilesToPetCommand>>();
+        _messageQueueMock = new Mock<IMessageQueue<IEnumerable<FileInfo>>>();
         _loggerMock = new Mock<ILogger<UploadFilesToPetHandler>>();
 
         _handler = new UploadFilesToPetHandler(
@@ -42,6 +46,7 @@ public class UploadFilesToPetTests
             _volunteersRepositoryMock.Object,
             _unitOfWorkMock.Object,
             _validatorMock.Object,
+            _messageQueueMock.Object,
             _loggerMock.Object);
 
         _ct = new CancellationTokenSource().Token;

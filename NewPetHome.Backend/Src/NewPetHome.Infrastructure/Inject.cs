@@ -2,11 +2,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
 using NewPetHome.Applications.Database;
-using NewPetHome.Applications.FileProvider;
+using NewPetHome.Applications.Files;
+using NewPetHome.Applications.Messaging;
 using NewPetHome.Applications.Volunteers;
+using NewPetHome.Infrastructure.BackgroundServices;
+using NewPetHome.Infrastructure.MessageQueues;
 using NewPetHome.Infrastructure.Options;
 using NewPetHome.Infrastructure.Providers;
 using NewPetHome.Infrastructure.Repositories;
+using FileInfo = System.IO.FileInfo;
 
 namespace NewPetHome.Infrastructure;
 
@@ -20,6 +24,10 @@ public static class Inject
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddMinio(configuration);
+
+        services.AddHostedService<FilesCleanerBackgroundServices>();
+
+        services.AddSingleton<IMessageQueue<IEnumerable<FileInfo>>, InMemoryMessageQueue<IEnumerable<FileInfo>>>();
 
         return services;
     }

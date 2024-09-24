@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using NewPetHome.API.Extensions;
-using NewPetHome.Applications.FileProvider;
+using NewPetHome.Applications.Files;
 
 namespace NewPetHome.API.Controllers;
 
