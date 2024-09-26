@@ -133,9 +133,9 @@ public class MinioProvider : IFileProvider
     {
         try
         {
-            if(IsBucketExist(fileInfo.BucketName, cancellationToken).Result == false)
+            if (await IsBucketExist(fileInfo.BucketName, cancellationToken) == false)
                 return Result.Success<Error>();
-            
+
             var statArgs = new StatObjectArgs()
                 .WithBucket(fileInfo.BucketName)
                 .WithObject(fileInfo.FilePath.Path);

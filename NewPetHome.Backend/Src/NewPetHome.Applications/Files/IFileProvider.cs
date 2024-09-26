@@ -13,8 +13,7 @@ public interface IFileProvider
         FileMetaData fileData, CancellationToken cancellationToken = default);
 
     Task<UnitResult<Error>> RemoveFile(
-        FileInfo fileInfo,
-        CancellationToken cancellationToken = default);
+        FileInfo fileInfo, CancellationToken cancellationToken = default);
 
     Task<Result<string, Error>> GetFileByName(
         FileMetaData fileData, CancellationToken cancellationToken = default);

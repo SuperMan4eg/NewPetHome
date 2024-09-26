@@ -1,17 +1,18 @@
 using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
-using NewPetHome.Applications.Volunteers;
+using NewPetHome.Applications.VolunteersManagement;
 using NewPetHome.Domain.Shared;
 using NewPetHome.Domain.VolunteersManagement.Entities;
 using NewPetHome.Domain.VolunteersManagement.IDs;
+using NewPetHome.Infrastructure.DbContexts;
 
 namespace NewPetHome.Infrastructure.Repositories;
 
 public class VolunteersRepository : IVolunteersRepository
 {
-    private readonly ApplicationDbContext _dbContext;
+    private readonly WriteDbContext _dbContext;
 
-    public VolunteersRepository(ApplicationDbContext dbContext)
+    public VolunteersRepository(WriteDbContext dbContext)
     {
         _dbContext = dbContext;
     }

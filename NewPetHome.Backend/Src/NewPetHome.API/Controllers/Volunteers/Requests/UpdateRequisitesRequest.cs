@@ -1,5 +1,5 @@
 using NewPetHome.Applications.Dtos;
-using NewPetHome.Applications.Volunteers.UpdateRequisites;
+using NewPetHome.Applications.VolunteersManagement.Commands.UpdateRequisites;
 
 namespace NewPetHome.API.Controllers.Volunteers.Requests;
 

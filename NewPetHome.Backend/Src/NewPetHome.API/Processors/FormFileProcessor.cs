@@ -1,5 +1,4 @@
 using NewPetHome.Applications.Dtos;
-using NewPetHome.Applications.Volunteers.AddPet;
 
 namespace NewPetHome.API.Processors;
 

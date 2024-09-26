@@ -1,0 +1,3 @@
+namespace NewPetHome.Applications.Abstraction;
+
+public interface ICommand;

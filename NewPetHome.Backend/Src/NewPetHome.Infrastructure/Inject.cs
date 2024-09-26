@@ -4,13 +4,15 @@ using Minio;
 using NewPetHome.Applications.Database;
 using NewPetHome.Applications.Files;
 using NewPetHome.Applications.Messaging;
-using NewPetHome.Applications.Volunteers;
+using NewPetHome.Applications.VolunteersManagement;
 using NewPetHome.Infrastructure.BackgroundServices;
+using NewPetHome.Infrastructure.DbContexts;
+using NewPetHome.Infrastructure.Files;
 using NewPetHome.Infrastructure.MessageQueues;
 using NewPetHome.Infrastructure.Options;
 using NewPetHome.Infrastructure.Providers;
 using NewPetHome.Infrastructure.Repositories;
-using FileInfo = System.IO.FileInfo;
+using FileInfo = NewPetHome.Applications.Files.FileInfo;
 
 namespace NewPetHome.Infrastructure;
 
@@ -19,15 +21,58 @@ public static class Inject
     public static IServiceCollection AddInfrastructure(
         this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddScoped<ApplicationDbContext>();
-        services.AddScoped<IVolunteersRepository, VolunteersRepository>();
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services
+            .AddDbContexts()
+            .AddRepositories()
+            .AddDatabase()
+            .AddHostedServices()
+            .AddMessageQueues()
+            .AddServices()
+            .AddServices()
+            .AddMinio(configuration);
 
-        services.AddMinio(configuration);
+        return services;
+    }
 
+    private static IServiceCollection AddServices(this IServiceCollection services)
+    {
+        services.AddScoped<IFileCleanerService, FilesCleanerService>();
+
+        return services;
+    }
+        
+    private static IServiceCollection AddMessageQueues(this IServiceCollection services)
+    {
+        services.AddSingleton<IMessageQueue<IEnumerable<FileInfo>>, InMemoryMessageQueue<IEnumerable<FileInfo>>>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddHostedServices(this IServiceCollection services)
+    {
         services.AddHostedService<FilesCleanerBackgroundServices>();
 
-        services.AddSingleton<IMessageQueue<IEnumerable<FileInfo>>, InMemoryMessageQueue<IEnumerable<FileInfo>>>();
+        return services;
+    }
+
+    private static IServiceCollection AddDatabase(this IServiceCollection services)
+    {
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddRepositories(this IServiceCollection services)
+    {
+        services.AddScoped<IVolunteersRepository, VolunteersRepository>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddDbContexts(this IServiceCollection services)
+    {
+        services.AddScoped<WriteDbContext>();
+        services.AddScoped<IReadDbContext, ReadDbContext>();
 
         return services;
     }
