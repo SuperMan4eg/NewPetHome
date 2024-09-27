@@ -1,5 +1,5 @@
 using NewPetHome.Applications.Dtos;
-using NewPetHome.Applications.Volunteers.UpdateSocialNetworks;
+using NewPetHome.Applications.VolunteersManagement.Commands.UpdateSocialNetworks;
 
 namespace NewPetHome.API.Controllers.Volunteers.Requests;
 

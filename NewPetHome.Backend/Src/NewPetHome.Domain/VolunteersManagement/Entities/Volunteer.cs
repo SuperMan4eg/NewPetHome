@@ -12,6 +12,8 @@ public sealed class Volunteer : Shared.Entity<VolunteerId>, ISoftDeletable
     private bool _isDeleted = false;
 
     private readonly List<Pet> _pets = [];
+    private List<Requisite> _requisites = [];
+    private List<SocialNetwork> _socialNetworks = [];
 
     private Volunteer(VolunteerId id) : base(id)
     {
@@ -33,8 +35,8 @@ public sealed class Volunteer : Shared.Entity<VolunteerId>, ISoftDeletable
         Email = email;
         Experience = experience;
         PhoneNumber = phoneNumber;
-        Requisites = requisites;
-        SocialNetworks = socialNetworks;
+        _requisites = requisites;
+        _socialNetworks = socialNetworks;
     }
 
     public FullName FullName { get; private set; } = default!;
@@ -43,8 +45,8 @@ public sealed class Volunteer : Shared.Entity<VolunteerId>, ISoftDeletable
     public Experience Experience { get; private set; } = default!;
     public PhoneNumber PhoneNumber { get; private set; } = default!;
     public IReadOnlyList<Pet> Pets => _pets;
-    public ValueObjectList<Requisite> Requisites { get; private set; }
-    public ValueObjectList<SocialNetwork> SocialNetworks { get; private set; }
+    public IReadOnlyList<Requisite> Requisites => _requisites;
+    public IReadOnlyList<SocialNetwork> SocialNetworks => _socialNetworks;
 
     public Result<Pet, Error> GetPetById(PetId petId)
     {
@@ -70,14 +72,14 @@ public sealed class Volunteer : Shared.Entity<VolunteerId>, ISoftDeletable
         PhoneNumber = phoneNumber;
     }
 
-    public void UpdateRequisites(ValueObjectList<Requisite> requisites)
+    public void UpdateRequisites(List<Requisite> requisites)
     {
-        Requisites = requisites;
+        _requisites = requisites;
     }
 
-    public void UpdateSocialNetworks(ValueObjectList<SocialNetwork> socialNetworks)
+    public void UpdateSocialNetworks(List<SocialNetwork> socialNetworks)
     {
-        SocialNetworks = socialNetworks;
+        _socialNetworks = socialNetworks;
     }
 
     public void Delete()

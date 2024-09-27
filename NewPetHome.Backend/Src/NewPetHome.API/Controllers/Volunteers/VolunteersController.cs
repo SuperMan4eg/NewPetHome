@@ -2,18 +2,30 @@ using Microsoft.AspNetCore.Mvc;
 using NewPetHome.API.Controllers.Volunteers.Requests;
 using NewPetHome.API.Extensions;
 using NewPetHome.API.Processors;
-using NewPetHome.Applications.Volunteers.AddPet;
-using NewPetHome.Applications.Volunteers.Create;
-using NewPetHome.Applications.Volunteers.Delete;
-using NewPetHome.Applications.Volunteers.UpdateMainInfo;
-using NewPetHome.Applications.Volunteers.UpdateRequisites;
-using NewPetHome.Applications.Volunteers.UpdateSocialNetworks;
-using NewPetHome.Applications.Volunteers.UploadFilesToPet;
+using NewPetHome.Applications.VolunteersManagement.Commands.AddPet;
+using NewPetHome.Applications.VolunteersManagement.Commands.Create;
+using NewPetHome.Applications.VolunteersManagement.Commands.Delete;
+using NewPetHome.Applications.VolunteersManagement.Commands.UpdateMainInfo;
+using NewPetHome.Applications.VolunteersManagement.Commands.UpdateRequisites;
+using NewPetHome.Applications.VolunteersManagement.Commands.UpdateSocialNetworks;
+using NewPetHome.Applications.VolunteersManagement.Commands.UploadFilesToPet;
+using NewPetHome.Applications.VolunteersManagement.Queries.GetVolunteersWithPagination;
 
 namespace NewPetHome.API.Controllers.Volunteers;
 
 public class VolunteersController : ApplicationController
 {
+    [HttpGet]
+    public async Task<ActionResult> Get(
+        [FromQuery] GetFilteredVolunteerWithPaginationRequest request,
+        [FromServices] GetFilteredVolunteersWithPaginationHandler handler,
+        CancellationToken cancellationToken = default)
+    {
+        var response = await handler.Handle(request.ToQuery(), cancellationToken);
+
+        return Ok(response);
+    }
+    
     [HttpPost]
     public async Task<ActionResult<Guid>> Create(
         [FromServices] CreateVolunteerHandler handler,

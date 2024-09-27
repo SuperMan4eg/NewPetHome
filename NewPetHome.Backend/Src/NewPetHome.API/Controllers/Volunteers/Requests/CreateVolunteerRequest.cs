@@ -1,5 +1,5 @@
 using NewPetHome.Applications.Dtos;
-using NewPetHome.Applications.Volunteers.Create;
+using NewPetHome.Applications.VolunteersManagement.Commands.Create;
 
 namespace NewPetHome.API.Controllers.Volunteers.Requests;
 

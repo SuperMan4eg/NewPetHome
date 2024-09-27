@@ -1,12 +1,14 @@
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using NewPetHome.Applications.Volunteers.AddPet;
-using NewPetHome.Applications.Volunteers.Create;
-using NewPetHome.Applications.Volunteers.Delete;
-using NewPetHome.Applications.Volunteers.UpdateMainInfo;
-using NewPetHome.Applications.Volunteers.UpdateRequisites;
-using NewPetHome.Applications.Volunteers.UpdateSocialNetworks;
-using NewPetHome.Applications.Volunteers.UploadFilesToPet;
+using NewPetHome.Applications.Abstraction;
+using NewPetHome.Applications.VolunteersManagement.Commands.AddPet;
+using NewPetHome.Applications.VolunteersManagement.Commands.Create;
+using NewPetHome.Applications.VolunteersManagement.Commands.Delete;
+using NewPetHome.Applications.VolunteersManagement.Commands.UpdateMainInfo;
+using NewPetHome.Applications.VolunteersManagement.Commands.UpdateRequisites;
+using NewPetHome.Applications.VolunteersManagement.Commands.UpdateSocialNetworks;
+using NewPetHome.Applications.VolunteersManagement.Commands.UploadFilesToPet;
+using NewPetHome.Applications.VolunteersManagement.Queries.GetVolunteersWithPagination;
 
 namespace NewPetHome.Applications;
 
@@ -14,16 +16,29 @@ public static class Inject
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        services.AddScoped<CreateVolunteerHandler>();
-        services.AddScoped<UpdateMainInfoHandler>();
-        services.AddScoped<UpdateRequisitesHandler>();
-        services.AddScoped<UpdateSocialNetworksHandler>();
-        services.AddScoped<DeleteVolunteerHandler>();
-        services.AddScoped<AddPetHandler>();
-        services.AddScoped<UploadFilesToPetHandler>();
-
-        services.AddValidatorsFromAssembly(typeof(Inject).Assembly);
+        services
+            .AddCommands()
+            .AddQueries()
+            .AddValidatorsFromAssembly(typeof(Inject).Assembly);
 
         return services;
+    }
+
+    private static IServiceCollection AddCommands(this IServiceCollection services)
+    {
+        return services.Scan(scan => scan.FromAssemblies(typeof(Inject).Assembly)
+            .AddClasses(classes => classes
+                .AssignableToAny(typeof(ICommandHandler<,>), typeof(ICommandHandler<>)))
+            .AsSelfWithInterfaces()
+            .WithScopedLifetime());
+    }
+
+    private static IServiceCollection AddQueries(this IServiceCollection services)
+    {
+        return services.Scan(scan => scan.FromAssemblies(typeof(Inject).Assembly)
+            .AddClasses(classes => classes
+                .AssignableTo(typeof(IQueryHandler<,>)))
+            .AsSelfWithInterfaces()
+            .WithScopedLifetime());
     }
 }
