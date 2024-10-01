@@ -82,14 +82,14 @@ public sealed class Volunteer : Shared.Entity<VolunteerId>, ISoftDeletable
         _socialNetworks = socialNetworks;
     }
 
-    public void Delete()
+    public void SoftDelete()
     {
         if (_isDeleted)
             return;
 
         _isDeleted = true;
         foreach (var pet in _pets)
-            pet.Delete();
+            pet.SoftDelete();
     }
 
     public void Restore()

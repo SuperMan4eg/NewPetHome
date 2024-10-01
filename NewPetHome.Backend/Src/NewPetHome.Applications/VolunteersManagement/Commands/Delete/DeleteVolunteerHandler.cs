@@ -39,7 +39,7 @@ public class DeleteVolunteerHandler : ICommandHandler<Guid, DeleteVolunteerComma
         if (volunteerResult.IsFailure)
             return volunteerResult.Error.ToErrorList();
 
-        volunteerResult.Value.Delete();
+        volunteerResult.Value.SoftDelete();
 
         await _unitOfWork.SaveChanges(cancellationToken);
 

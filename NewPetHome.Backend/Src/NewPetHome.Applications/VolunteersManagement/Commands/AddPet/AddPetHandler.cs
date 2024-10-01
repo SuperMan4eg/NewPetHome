@@ -61,7 +61,7 @@ public class AddPetHandler : ICommandHandler<Guid, AddPetCommand>
         var petId = PetId.NewPetId();
         var name = Name.Create(command.Name).Value;
         var description = Description.Create(command.Description).Value;
-        var typeDetails = TypeDetails.Create(SpeciesId.Empty(), BreedId.Empty()).Value;
+        var typeDetails = TypeDetails.Create(SpecieId.Empty(), BreedId.Empty()).Value;
         var color = Color.Create(command.Color).Value;
         var healthInfo = HealthInfo.Create(command.HealthInfo).Value;
         var address = Address.Create(command.Address.City, command.Address.Street, command.Address.HouseNumber).Value;

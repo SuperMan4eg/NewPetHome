@@ -21,5 +21,14 @@ public static class Errors
             var label = name == null ? "" : name + " ";
             return Error.Validation("length.is.invalid", $"invalid {label}length");
         }
+
+        public static Error AlreadyExists(string entity, string? fieldName = null, string? label = null)
+        {
+            fieldName ??= "field name";
+
+            label ??= $"such";
+
+            return Error.Failure("already.exists", $"{entity} with {label} {fieldName} already exists");
+        }
     }
 }

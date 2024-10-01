@@ -78,7 +78,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
     public void SetPosition(Position position) =>
         Position = position;
 
-    public void Delete()
+    public void SoftDelete()
     {
         if (_isDeleted)
             return;

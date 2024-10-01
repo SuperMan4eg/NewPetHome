@@ -5,17 +5,17 @@ namespace NewPetHome.Domain.VolunteersManagement.ValueObjects;
 
 public record TypeDetails
 {
-    private TypeDetails(SpeciesId speciesId, BreedId breedId)
+    private TypeDetails(SpecieId specieId, BreedId breedId)
     {
-        SpeciesId = speciesId;
+        SpecieId = specieId;
         BreedId = breedId;
     }
     
-    public SpeciesId SpeciesId { get; }
+    public SpecieId SpecieId { get; }
     public BreedId BreedId { get; }
     
-    public static Result<TypeDetails> Create(SpeciesId speciesId, BreedId breedId)
+    public static Result<TypeDetails> Create(SpecieId specieId, BreedId breedId)
     {
-        return new TypeDetails(speciesId, breedId);
+        return new TypeDetails(specieId, breedId);
     }
 }

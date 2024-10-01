@@ -9,7 +9,7 @@ namespace NewPetHome.Infrastructure.DbContexts;
 public class WriteDbContext(IConfiguration configuration) : DbContext
 {
     public DbSet<Volunteer> Volunteer => Set<Volunteer>();
-    public DbSet<Species> Species => Set<Species>();
+    public DbSet<Specie> Species => Set<Specie>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
