@@ -33,7 +33,6 @@ public class VolunteersController : ApplicationController
         CancellationToken cancellationToken = default)
     {
         var result = await handler.Handle(request.ToCommand(), cancellationToken);
-
         if (result.IsFailure)
             return result.Error.ToResponse();
 
@@ -48,7 +47,6 @@ public class VolunteersController : ApplicationController
         CancellationToken cancellationToken = default)
     {
         var result = await handler.Handle(request.ToCommand(id), cancellationToken);
-
         if (result.IsFailure)
             return result.Error.ToResponse();
 
@@ -63,7 +61,6 @@ public class VolunteersController : ApplicationController
         CancellationToken cancellationToken = default)
     {
         var result = await handler.Handle(request.ToCommand(id), cancellationToken);
-
         if (result.IsFailure)
             return result.Error.ToResponse();
 
@@ -78,7 +75,6 @@ public class VolunteersController : ApplicationController
         CancellationToken cancellationToken = default)
     {
         var result = await handler.Handle(request.ToCommand(id), cancellationToken);
-
         if (result.IsFailure)
             return result.Error.ToResponse();
 
@@ -94,7 +90,6 @@ public class VolunteersController : ApplicationController
         var command = new DeleteVolunteerCommand(id);
 
         var result = await handler.Handle(command, cancellationToken);
-
         if (result.IsFailure)
             return result.Error.ToResponse();
 
@@ -111,16 +106,15 @@ public class VolunteersController : ApplicationController
         var command = request.ToCommand(id);
             
         var result = await handler.Handle(command, cancellationToken);
-
         if (result.IsFailure)
             return result.Error.ToResponse();
 
         return Ok(result.Value);
     }
 
-    [HttpPost("{id:guid}/pet/{petId:guid}/files")]
+    [HttpPost("{volunteerId:guid}/pet/{petId:guid}/files")]
     public async Task<ActionResult> UploadFilesToPet(
-        [FromRoute] Guid id,
+        [FromRoute] Guid volunteerId,
         [FromRoute] Guid petId,
         [FromForm] IFormFileCollection files,
         [FromServices] UploadFilesToPetHandler handler,
@@ -129,7 +123,7 @@ public class VolunteersController : ApplicationController
         await using var fileProcessor = new FormFileProcessor();
         var fileDtos = fileProcessor.Process(files);
 
-        var command = new UploadFilesToPetCommand(id, petId, fileDtos);
+        var command = new UploadFilesToPetCommand(volunteerId, petId, fileDtos);
 
         var result = await handler.Handle(command, cancellationToken);
         if (result.IsFailure)

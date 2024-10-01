@@ -43,10 +43,10 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
 
         builder.OwnsOne(p => p.TypeDetails, td =>
         {
-            td.Property(t => t.SpeciesId)
+            td.Property(t => t.SpecieId)
                 .HasConversion(
                     id => id.Value,
-                    value => SpeciesId.Create(value))
+                    value => SpecieId.Create(value))
                 .HasColumnName("species_id");
 
             td.Property(t => t.BreedId)

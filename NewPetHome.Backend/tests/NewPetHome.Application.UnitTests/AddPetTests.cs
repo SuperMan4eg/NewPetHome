@@ -196,7 +196,7 @@ public class AddPetTests
             socialNetworks);
 
         var name = Name.Create("test").Value;
-        var speciesId = SpeciesId.NewSpeciesId();
+        var speciesId = SpecieId.NewSpeciesId();
         var breedId = BreedId.NewBreedId();
         var typeDetails = TypeDetails.Create(speciesId, breedId).Value;
         var color = Color.Create("test").Value;

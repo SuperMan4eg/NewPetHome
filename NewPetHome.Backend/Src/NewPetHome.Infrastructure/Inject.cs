@@ -4,6 +4,7 @@ using Minio;
 using NewPetHome.Applications.Database;
 using NewPetHome.Applications.Files;
 using NewPetHome.Applications.Messaging;
+using NewPetHome.Applications.SpeciesManagement;
 using NewPetHome.Applications.VolunteersManagement;
 using NewPetHome.Infrastructure.BackgroundServices;
 using NewPetHome.Infrastructure.DbContexts;
@@ -40,7 +41,7 @@ public static class Inject
 
         return services;
     }
-        
+
     private static IServiceCollection AddMessageQueues(this IServiceCollection services)
     {
         services.AddSingleton<IMessageQueue<IEnumerable<FileInfo>>, InMemoryMessageQueue<IEnumerable<FileInfo>>>();
@@ -65,6 +66,7 @@ public static class Inject
     private static IServiceCollection AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<IVolunteersRepository, VolunteersRepository>();
+        services.AddScoped<ISpeciesRepository, SpeciesRepository>();
 
         return services;
     }
