@@ -18,7 +18,7 @@ public class VolunteerDto
 
     public PetDto[] Pets { get; init; } = [];
 
-    public SocialNetworkDto[] SocialNetworks { get; init; } = [];
+    public RequisiteDto[] Requisites { get; set; } = [];
 
-    public RequisiteDto[] Requisites { get; init; } = [];
+    public SocialNetworkDto[] SocialNetworks { get; set; } = [];
 }

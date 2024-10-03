@@ -81,7 +81,9 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
                     (c1, c2) => c1!.SequenceEqual(c2!),
                     c => c.Aggregate(0, (a, v) =>
                         HashCode.Combine(a, v.GetHashCode())),
-                    c => (IReadOnlyList<Requisite>)c.ToList()));
+                    c => (IReadOnlyList<Requisite>)c.ToList()))
+            .HasColumnType("jsonb")
+            .HasColumnName("requisites");
 
         builder.Property(v => v.SocialNetworks)
             .HasConversion(
@@ -94,7 +96,9 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
                     (c1, c2) => c1!.SequenceEqual(c2!),
                     c => c.Aggregate(0, (a, v) =>
                         HashCode.Combine(a, v.GetHashCode())),
-                    c => (IReadOnlyList<SocialNetwork>)c.ToList()));
+                    c => (IReadOnlyList<SocialNetwork>)c.ToList()))
+            .HasColumnType("jsonb")
+            .HasColumnName("social_networks");
 
         builder.Property<bool>("_isDeleted")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
