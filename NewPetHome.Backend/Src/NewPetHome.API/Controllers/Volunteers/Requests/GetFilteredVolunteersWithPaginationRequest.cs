@@ -2,7 +2,7 @@ using NewPetHome.Applications.VolunteersManagement.Queries.GetVolunteersWithPagi
 
 namespace NewPetHome.API.Controllers.Volunteers.Requests;
 
-public record GetFilteredVolunteerWithPaginationRequest(
+public record GetFilteredVolunteersWithPaginationRequest(
     string? FirstName,
     int? ExperienceFrom,
     int? ExperienceTo,

@@ -9,6 +9,7 @@ using NewPetHome.Applications.VolunteersManagement.Commands.UpdateMainInfo;
 using NewPetHome.Applications.VolunteersManagement.Commands.UpdateRequisites;
 using NewPetHome.Applications.VolunteersManagement.Commands.UpdateSocialNetworks;
 using NewPetHome.Applications.VolunteersManagement.Commands.UploadFilesToPet;
+using NewPetHome.Applications.VolunteersManagement.Queries.GetVolunteerById;
 using NewPetHome.Applications.VolunteersManagement.Queries.GetVolunteersWithPagination;
 
 namespace NewPetHome.API.Controllers.Volunteers;
@@ -17,15 +18,30 @@ public class VolunteersController : ApplicationController
 {
     [HttpGet]
     public async Task<ActionResult> Get(
-        [FromQuery] GetFilteredVolunteerWithPaginationRequest request,
+        [FromQuery] GetFilteredVolunteersWithPaginationRequest request,
         [FromServices] GetFilteredVolunteersWithPaginationHandler handler,
         CancellationToken cancellationToken = default)
     {
-        var response = await handler.Handle(request.ToQuery(), cancellationToken);
+        var result = await handler.Handle(request.ToQuery(), cancellationToken);
+        if (result.IsFailure)
+            return result.Error.ToResponse();
 
-        return Ok(response);
+        return Ok(result.Value);
     }
-    
+
+    [HttpGet("dapper")]
+    public async Task<ActionResult> GetById(
+        [FromQuery] GetVolunteerByIdRequest request,
+        [FromServices] GetVolunteerByIdHandlerDapper handler,
+        CancellationToken cancellationToken = default)
+    {
+        var result = await handler.Handle(request.ToQuery(), cancellationToken);
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Ok(result.Value);
+    }
+
     [HttpPost]
     public async Task<ActionResult<Guid>> Create(
         [FromServices] CreateVolunteerHandler handler,
@@ -104,7 +120,7 @@ public class VolunteersController : ApplicationController
         CancellationToken cancellationToken = default)
     {
         var command = request.ToCommand(id);
-            
+
         var result = await handler.Handle(command, cancellationToken);
         if (result.IsFailure)
             return result.Error.ToResponse();
