@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <UserSecretsId>fd0aad05-665e-47b8-ab9e-85dfe144643f</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.8" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Serilog.AspNetCore" Version="8.0.2" />
+        <PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1" />
+        <PackageReference Include="Serilog.Enrichers.Thread" Version="4.0.0" />
+        <PackageReference Include="Serilog.Exceptions" Version="8.4.0" />
+        <PackageReference Include="Serilog.Sinks.Http" Version="9.0.0" />
+        <PackageReference Include="Serilog.Sinks.Seq" Version="8.0.0" />
+        <PackageReference Include="Serilog.Sinks.Trace" Version="4.0.0" />
+        <PackageReference Include="SharpGrip.FluentValidation.AutoValidation.Mvc" Version="1.4.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.8.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Shared\NewPetHome.Framework\NewPetHome.Framework.csproj" />
+      <ProjectReference Include="..\Shared\NewPetHome.SharedKernel\NewPetHome.SharedKernel.csproj" />
+      <ProjectReference Include="..\Species\NewPetHome.Species.Applications\NewPetHome.Species.Applications.csproj" />
+      <ProjectReference Include="..\Species\NewPetHome.Species.Contracts\NewPetHome.Species.Contracts.csproj" />
+      <ProjectReference Include="..\Species\NewPetHome.Species.Presentation\NewPetHome.Species.Presentation.csproj" />
+      <ProjectReference Include="..\Species\NewPetHome.Species.Domain\NewPetHome.Species.Domain.csproj" />
+      <ProjectReference Include="..\Species\NewPetHome.Species.Infrastructure\NewPetHome.Species.Infrastructure.csproj" />
+      <ProjectReference Include="..\Volunteers\NewPetHome.Volunteers.Application\NewPetHome.Volunteers.Application.csproj" />
+      <ProjectReference Include="..\Volunteers\NewPetHome.Volunteers.Contracts\NewPetHome.Volunteers.Contracts.csproj" />
+      <ProjectReference Include="..\Volunteers\NewPetHome.Volunteers.Presentation\NewPetHome.Volunteers.Presentation.csproj" />
+      <ProjectReference Include="..\Volunteers\NewPetHome.Volunteers.Domain\NewPetHome.Volunteers.Domain.csproj" />
+      <ProjectReference Include="..\Volunteers\NewPetHome.Volunteers.Infrastructure\NewPetHome.Volunteers.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
+    </ItemGroup>
+
+</Project>

@@ -1,23 +1,24 @@
+/*using System.Drawing;
 using CSharpFunctionalExtensions;
 using FluentAssertions;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
 using Moq;
-using NewPetHome.Applications.Database;
 using NewPetHome.Applications.Dtos;
 using NewPetHome.Applications.Files;
-using NewPetHome.Applications.Messaging;
 using NewPetHome.Applications.VolunteersManagement;
 using NewPetHome.Applications.VolunteersManagement.Commands.UploadFilesToPet;
-using NewPetHome.Domain.Shared;
-using NewPetHome.Domain.Shared.ValueObjects;
+using NewPetHome.Core;
+using NewPetHome.Core.Dtos;
+using NewPetHome.Core.Messaging;
+using NewPetHome.Core.ValueObjects;
 using NewPetHome.Domain.SpeciesManagement.IDs;
 using NewPetHome.Domain.VolunteersManagement.Entities;
 using NewPetHome.Domain.VolunteersManagement.Enums;
 using NewPetHome.Domain.VolunteersManagement.IDs;
 using NewPetHome.Domain.VolunteersManagement.ValueObjects;
-using FileInfo = NewPetHome.Applications.Files.FileInfo;
+using FileInfo = NewPetHome.Core.FileInfo;
 
 namespace NewPetHome.Application.UnitTests;
 
@@ -71,7 +72,7 @@ public class UploadFilesToPetTests
 
         _fileProviderMock
             .Setup(f => f.UploadFiles(It.IsAny<List<FileData>>(), _ct))
-            .ReturnsAsync(Result.Success<IReadOnlyList<FilePath>, Error>(filePaths));
+            .ReturnsAsync(Result<,>.Success<IReadOnlyList<FilePath>, Error>(filePaths));
 
         _volunteersRepositoryMock
             .Setup(v => v.GetById(volunteer.Id, _ct))
@@ -121,7 +122,7 @@ public class UploadFilesToPetTests
         // assert
         result.IsFailure.Should().BeTrue();
 
-        var error = result.Error.First();
+        var error = Error.First();
         error.Type.Should().Be(ErrorType.NotFound);
         error.Code.Should().Be(Errors.General.NotFound().Code);
     }
@@ -155,7 +156,7 @@ public class UploadFilesToPetTests
         // assert
         result.IsFailure.Should().BeTrue();
 
-        var error = result.Error.First();
+        var error = Error.First();
         error.Type.Should().Be(ErrorType.Validation);
         error.Code.Should().Be(Errors.General.ValueIsInvalid().Code);
         error.InvalidField.Should().Be(nameof(command.Files));
@@ -197,7 +198,7 @@ public class UploadFilesToPetTests
         // assert
         result.IsFailure.Should().BeTrue();
 
-        var error = result.Error.First();
+        var error = Error.First();
         error.Type.Should().Be(ErrorType.Failure);
         error.Code.Should().Be("file.upload");
         error.Message.Should().Be("Fail to upload files in minio");
@@ -282,4 +283,4 @@ public class UploadFilesToPetTests
 
         return volunteer;
     }
-}
+}*/

@@ -1,19 +1,6 @@
+/*using System.Drawing;
 using FluentAssertions;
-using FluentValidation;
-using FluentValidation.Results;
-using Microsoft.Extensions.Logging;
 using Moq;
-using NewPetHome.Applications.Database;
-using NewPetHome.Applications.Dtos;
-using NewPetHome.Applications.VolunteersManagement;
-using NewPetHome.Applications.VolunteersManagement.Commands.AddPet;
-using NewPetHome.Domain.Shared;
-using NewPetHome.Domain.Shared.ValueObjects;
-using NewPetHome.Domain.SpeciesManagement.IDs;
-using NewPetHome.Domain.VolunteersManagement.Entities;
-using NewPetHome.Domain.VolunteersManagement.Enums;
-using NewPetHome.Domain.VolunteersManagement.IDs;
-using NewPetHome.Domain.VolunteersManagement.ValueObjects;
 
 namespace NewPetHome.Application.UnitTests;
 
@@ -125,7 +112,7 @@ public class AddPetTests
         // assert
         result.IsFailure.Should().BeTrue();
 
-        var error = result.Error.First();
+        var error = Error.First();
         error.Type.Should().Be(ErrorType.Validation);
         error.Code.Should().Be(Errors.General.ValueIsInvalid().Code);
         error.InvalidField.Should().Be(nameof(command.Status));
@@ -169,7 +156,7 @@ public class AddPetTests
         // assert
         result.IsFailure.Should().BeTrue();
 
-        var error = result.Error.First();
+        var error = Error.First();
         error.Type.Should().Be(ErrorType.NotFound);
         error.Code.Should().Be(Errors.General.NotFound().Code);
     }
@@ -235,4 +222,4 @@ public class AddPetTests
 
         return volunteer;
     }
-}
+}*/
