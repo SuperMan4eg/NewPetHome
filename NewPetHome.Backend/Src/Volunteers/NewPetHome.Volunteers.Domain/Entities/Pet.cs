@@ -7,7 +7,7 @@ using NewPetHome.Volunteers.Domain.ValueObjects;
 
 namespace NewPetHome.Volunteers.Domain.Entities;
 
-public class Pet : Core.Entity<PetId>, ISoftDeletable
+public class Pet : Entity<PetId>, ISoftDeletable
 {
     private bool _isDeleted = false;
 

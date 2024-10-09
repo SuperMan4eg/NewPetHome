@@ -7,7 +7,7 @@ using NewPetHome.Volunteers.Domain.ValueObjects;
 
 namespace NewPetHome.Volunteers.Domain.Entities;
 
-public sealed class Volunteer : Core.Entity<VolunteerId>, ISoftDeletable
+public sealed class Volunteer : Entity<VolunteerId>, ISoftDeletable
 {
     private bool _isDeleted = false;
 

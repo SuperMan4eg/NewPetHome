@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Shared\NewPetHome.Core\NewPetHome.Core.csproj" />
+      <ProjectReference Include="..\..\Shared\NewPetHome.SharedKernel\NewPetHome.SharedKernel.csproj" />
     </ItemGroup>
 
 </Project>
