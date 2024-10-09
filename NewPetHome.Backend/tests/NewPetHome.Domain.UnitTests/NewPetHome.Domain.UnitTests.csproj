@@ -22,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Src\NewPetHome.Domain\NewPetHome.Domain.csproj" />
+      <ProjectReference Include="..\..\src\Shared\NewPetHome.SharedKernel\NewPetHome.SharedKernel.csproj" />
     </ItemGroup>
 
 </Project>
