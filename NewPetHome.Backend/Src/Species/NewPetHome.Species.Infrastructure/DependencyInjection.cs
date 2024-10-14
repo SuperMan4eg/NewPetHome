@@ -5,6 +5,7 @@ using NewPetHome.Core.Abstraction;
 using NewPetHome.Species.Applications;
 using NewPetHome.Species.Infrastructure.DbContexts;
 using NewPetHome.Species.Infrastructure.Repositories;
+using NewPetHome.Volunteers.Contracts;
 
 namespace NewPetHome.Species.Infrastructure;
 
@@ -23,10 +24,8 @@ public static class DependencyInjection
 
     private static IServiceCollection AddDatabase(this IServiceCollection services)
     {
-        /*
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>();
-        */
+        services.AddScoped<ISpeciesUnitOfWork, SpeciesUnitOfWork>();
+        // services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>();
 
         Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
 
@@ -43,7 +42,7 @@ public static class DependencyInjection
     private static IServiceCollection AddDbContexts(this IServiceCollection services)
     {
         services.AddScoped<SpeciesWriteDbContext>();
-        services.AddScoped<IReadDbContext, ReadDbContext>();
+        services.AddScoped<ISpeciesReadDbContext, SpeciesReadDbContext>();
 
         return services;
     }

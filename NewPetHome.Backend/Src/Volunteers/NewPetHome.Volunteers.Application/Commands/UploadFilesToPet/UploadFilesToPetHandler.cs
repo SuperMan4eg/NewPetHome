@@ -19,7 +19,7 @@ public class UploadFilesToPetHandler : ICommandHandler<Guid, UploadFilesToPetCom
 
     private readonly IFileProvider _fileProvider;
     private readonly IVolunteersRepository _volunteersRepository;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IVolunteersUnitOfWork _volunteersUnitOfWork;
     private readonly IValidator<UploadFilesToPetCommand> _validator;
     private readonly IMessageQueue<IEnumerable<FileInfo>> _messageQueue;
     private readonly ILogger<UploadFilesToPetHandler> _logger;
@@ -27,14 +27,14 @@ public class UploadFilesToPetHandler : ICommandHandler<Guid, UploadFilesToPetCom
     public UploadFilesToPetHandler(
         IFileProvider fileProvider,
         IVolunteersRepository volunteersRepository,
-        IUnitOfWork unitOfWork,
+        IVolunteersUnitOfWork volunteersUnitOfWork,
         IValidator<UploadFilesToPetCommand> validator,
         IMessageQueue<IEnumerable<FileInfo>> messageQueue,
         ILogger<UploadFilesToPetHandler> logger)
     {
         _fileProvider = fileProvider;
         _volunteersRepository = volunteersRepository;
-        _unitOfWork = unitOfWork;
+        _volunteersUnitOfWork = volunteersUnitOfWork;
         _validator = validator;
         _messageQueue = messageQueue;
         _logger = logger;
@@ -88,7 +88,7 @@ public class UploadFilesToPetHandler : ICommandHandler<Guid, UploadFilesToPetCom
 
         petResult.Value.UpdatePhotos(petPhotos);
 
-        await _unitOfWork.SaveChanges(cancellationToken);
+        await _volunteersUnitOfWork.SaveChanges(cancellationToken);
 
         _logger.LogInformation("Success uploaded photos to pet - {petId}", petId.Value);
 

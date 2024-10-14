@@ -31,4 +31,11 @@ public class Specie : Entity<SpecieId>
 
         return breed.Id.Value;
     }
+
+    public Result<Guid, Error> DeleteBreed(Breed breed)
+    {
+        _breeds.Remove(breed);
+
+        return breed.Id.Value;
+    }
 }

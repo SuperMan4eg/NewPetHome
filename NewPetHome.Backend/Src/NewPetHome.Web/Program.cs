@@ -2,9 +2,11 @@
 using NewPetHome.Species.Applications;
 using NewPetHome.Species.Infrastructure;
 using NewPetHome.Species.Infrastructure.DbContexts;
+using NewPetHome.Species.Presentation;
 using NewPetHome.Volunteers.Application;
 using NewPetHome.Volunteers.Infrastructure;
 using NewPetHome.Volunteers.Infrastructure.DbContexts;
+using NewPetHome.Volunteers.Presentation;
 using NewPetHome.Web.Extensions;
 using Serilog;
 
@@ -15,8 +17,10 @@ builder.ConfigureLogging();
 builder.Services
     .AddSpeciesApplication()
     .AddSpeciesInfrastructure(builder.Configuration)
+    .AddSpeciesPresentation()
     .AddVolunteersApplication()
-    .AddVolunteersInfrastructure(builder.Configuration);
+    .AddVolunteersInfrastructure(builder.Configuration)
+    .AddVolunteersPresentation();
 
 builder.Services.AddControllers();
 

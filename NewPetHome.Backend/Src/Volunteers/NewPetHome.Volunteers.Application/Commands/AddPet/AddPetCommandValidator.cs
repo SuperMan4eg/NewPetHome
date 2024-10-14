@@ -13,6 +13,8 @@ public class AddPetCommandValidator : AbstractValidator<AddPetCommand>
         RuleFor(a => a.VolunteerId).NotEmpty().WithError(Errors.General.ValueIsRequired());
         RuleFor(a => a.Name).MustBeValueObject(Name.Create);
         RuleFor(a => a.Description).MustBeValueObject(Description.Create);
+        RuleFor(a => a.SpecieId).NotEmpty().WithError(Errors.General.ValueIsRequired());
+        RuleFor(a => a.BreedId).NotEmpty().WithError(Errors.General.ValueIsRequired());
         RuleFor(a => a.Color).MustBeValueObject(Color.Create);
         RuleFor(a => a.HealthInfo).MustBeValueObject(HealthInfo.Create);
 

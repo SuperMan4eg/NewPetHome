@@ -13,17 +13,17 @@ public class UpdateMainInfoHandler : ICommandHandler<Guid, UpdateMainInfoCommand
 {
     private readonly ILogger<UpdateMainInfoHandler> _logger;
     private readonly IVolunteersRepository _volunteersRepository;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IVolunteersUnitOfWork _volunteersUnitOfWork;
     private readonly IValidator<UpdateMainInfoCommand> _validator;
 
     public UpdateMainInfoHandler(
         IVolunteersRepository volunteersRepository,
-        IUnitOfWork unitOfWork,
+        IVolunteersUnitOfWork volunteersUnitOfWork,
         IValidator<UpdateMainInfoCommand> validator,
         ILogger<UpdateMainInfoHandler> logger)
     {
         _volunteersRepository = volunteersRepository;
-        _unitOfWork = unitOfWork;
+        _volunteersUnitOfWork = volunteersUnitOfWork;
         _validator = validator;
         _logger = logger;
     }
@@ -53,7 +53,7 @@ public class UpdateMainInfoHandler : ICommandHandler<Guid, UpdateMainInfoCommand
             experience,
             phoneNumber);
 
-        await _unitOfWork.SaveChanges(cancellationToken);
+        await _volunteersUnitOfWork.SaveChanges(cancellationToken);
 
         _logger.LogInformation("Volunteer main info update with id: {VolunteerId}.", command.VolunteerId);
 

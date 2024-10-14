@@ -7,7 +7,7 @@ using NewPetHome.Volunteers.Application;
 
 namespace NewPetHome.Volunteers.Infrastructure.DbContexts;
 
-public class ReadDbContext(IConfiguration configuration) : DbContext, IReadDbContext
+public class VolunteersReadDbContext(IConfiguration configuration) : DbContext, IVolunteersReadDbContext
 {
     public IQueryable<VolunteerDto> Volunteers => Set<VolunteerDto>();
     public IQueryable<PetDto> Pets => Set<PetDto>();

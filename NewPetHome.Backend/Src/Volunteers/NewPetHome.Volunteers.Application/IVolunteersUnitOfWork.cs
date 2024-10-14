@@ -1,8 +1,8 @@
 using System.Data;
 
-namespace NewPetHome.Core.Abstraction;
+namespace NewPetHome.Volunteers.Application;
 
-public interface IUnitOfWork
+public interface IVolunteersUnitOfWork
 {
     Task<IDbTransaction> BeginTransaction(CancellationToken cancellationToken = default);
 

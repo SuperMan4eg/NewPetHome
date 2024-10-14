@@ -11,14 +11,14 @@ namespace NewPetHome.Volunteers.Application.Queries.GetVolunteersWithPagination;
 public class GetFilteredVolunteersWithPaginationHandler
     : IQueryHandler<PagedList<VolunteerDto>, GetFilteredVolunteersWithPaginationQuery>
 {
-    private readonly IReadDbContext _readDbContext;
+    private readonly IVolunteersReadDbContext _volunteersReadDbContext;
     private readonly ILogger<GetFilteredVolunteersWithPaginationHandler> _logger;
 
     public GetFilteredVolunteersWithPaginationHandler(
-        IReadDbContext readDbContext,
+        IVolunteersReadDbContext volunteersReadDbContext,
         ILogger<GetFilteredVolunteersWithPaginationHandler> logger)
     {
-        _readDbContext = readDbContext;
+        _volunteersReadDbContext = volunteersReadDbContext;
         _logger = logger;
     }
 
@@ -26,7 +26,7 @@ public class GetFilteredVolunteersWithPaginationHandler
         GetFilteredVolunteersWithPaginationQuery query,
         CancellationToken cancellationToken)
     {
-        var volunteersQuery = _readDbContext.Volunteers;
+        var volunteersQuery = _volunteersReadDbContext.Volunteers;
 
         volunteersQuery = volunteersQuery.WhereIf(
             !string.IsNullOrWhiteSpace(query.FirstName),

@@ -4,6 +4,7 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <UserSecretsId>a4813978-0f2a-445e-a199-c731b89fd75e</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
@@ -15,6 +16,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Shared\NewPetHome.Core\NewPetHome.Core.csproj" />
+      <ProjectReference Include="..\..\Species\NewPetHome.Species.Contracts\NewPetHome.Species.Contracts.csproj" />
       <ProjectReference Include="..\NewPetHome.Volunteers.Domain\NewPetHome.Volunteers.Domain.csproj" />
     </ItemGroup>
     

@@ -14,18 +14,18 @@ namespace NewPetHome.Volunteers.Application.Commands.Create;
 public class CreateVolunteerHandler : ICommandHandler<Guid, CreateVolunteerCommand>
 {
     private readonly IVolunteersRepository _volunteersRepository;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IVolunteersUnitOfWork _volunteersUnitOfWork;
     private readonly IValidator<CreateVolunteerCommand> _validator;
     private readonly ILogger<CreateVolunteerHandler> _logger;
 
     public CreateVolunteerHandler(
         IVolunteersRepository volunteersRepository,
-        IUnitOfWork unitOfWork,
+        IVolunteersUnitOfWork volunteersUnitOfWork,
         IValidator<CreateVolunteerCommand> validator,
         ILogger<CreateVolunteerHandler> logger)
     {
         _volunteersRepository = volunteersRepository;
-        _unitOfWork = unitOfWork;
+        _volunteersUnitOfWork = volunteersUnitOfWork;
         _validator = validator;
         _logger = logger;
     }
@@ -42,7 +42,7 @@ public class CreateVolunteerHandler : ICommandHandler<Guid, CreateVolunteerComma
 
         await _volunteersRepository.Add(volunteer, cancellationToken);
 
-        await _unitOfWork.SaveChanges(cancellationToken);
+        await _volunteersUnitOfWork.SaveChanges(cancellationToken);
 
         _logger.LogInformation("Volunteer created with id: {VolunteerId}.", volunteer.Id.Value);
 

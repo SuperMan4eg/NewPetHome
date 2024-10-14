@@ -12,17 +12,17 @@ public class UpdateSocialNetworksHandler : ICommandHandler<Guid, UpdateSocialNet
 {
     private readonly ILogger<UpdateSocialNetworksHandler> _logger;
     private readonly IVolunteersRepository _volunteersRepository;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IVolunteersUnitOfWork _volunteersUnitOfWork;
     private readonly IValidator<UpdateSocialNetworksCommand> _validator;
 
     public UpdateSocialNetworksHandler(
         IVolunteersRepository volunteersRepository,
-        IUnitOfWork unitOfWork,
+        IVolunteersUnitOfWork volunteersUnitOfWork,
         IValidator<UpdateSocialNetworksCommand> validator,
         ILogger<UpdateSocialNetworksHandler> logger)
     {
         _volunteersRepository = volunteersRepository;
-        _unitOfWork = unitOfWork;
+        _volunteersUnitOfWork = volunteersUnitOfWork;
         _validator = validator;
         _logger = logger;
     }
@@ -45,7 +45,7 @@ public class UpdateSocialNetworksHandler : ICommandHandler<Guid, UpdateSocialNet
 
         volunteerResult.Value.UpdateSocialNetworks(socialNetworks);
 
-        await _unitOfWork.SaveChanges(cancellationToken);
+        await _volunteersUnitOfWork.SaveChanges(cancellationToken);
 
         _logger.LogInformation("Volunteer social networks update with id: {VolunteerId}.", command.VolunteerId);
 

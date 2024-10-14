@@ -58,7 +58,7 @@ public static class DependencyInjection
 
     private static IServiceCollection AddDatabase(this IServiceCollection services)
     {
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IVolunteersUnitOfWork, VolunteersUnitOfWork>();
         services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>();
 
         Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
@@ -76,7 +76,7 @@ public static class DependencyInjection
     private static IServiceCollection AddDbContexts(this IServiceCollection services)
     {
         services.AddScoped<VolunteersWriteDbContext>();
-        services.AddScoped<IReadDbContext, ReadDbContext>();
+        services.AddScoped<IVolunteersReadDbContext, VolunteersReadDbContext>();
 
         return services;
     }

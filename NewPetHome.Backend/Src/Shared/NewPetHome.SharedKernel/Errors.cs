@@ -30,5 +30,12 @@ public static class Errors
 
             return Error.Failure("already.exists", $"{entity} with {label} {fieldName} already exists");
         }
+        
+        public static Error IsUsed(string entity, Guid? id = null)
+        {
+            var withId = id == null ? "such" : "{id}";
+
+            return Error.Failure("value.is.used", $"{entity} with {withId} id currently in use");
+        }
     }
 }

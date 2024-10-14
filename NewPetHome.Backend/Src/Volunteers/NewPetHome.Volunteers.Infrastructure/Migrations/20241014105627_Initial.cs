@@ -43,6 +43,8 @@ namespace NewPetHome.Volunteers.Infrastructure.Migrations
                     is_vaccinated = table.Column<bool>(type: "boolean", nullable: false),
                     status = table.Column<string>(type: "text", nullable: true),
                     created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    photos = table.Column<string>(type: "jsonb", nullable: false),
+                    requisites = table.Column<string>(type: "jsonb", nullable: false),
                     is_deleted = table.Column<bool>(type: "boolean", nullable: false),
                     volunteer_id = table.Column<Guid>(type: "uuid", nullable: true),
                     city = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
@@ -55,9 +57,7 @@ namespace NewPetHome.Volunteers.Infrastructure.Migrations
                     name_value = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     phone_number_value = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
                     position_value = table.Column<int>(type: "integer", nullable: false),
-                    weight_value = table.Column<double>(type: "double precision", nullable: false),
-                    photos = table.Column<string>(type: "jsonb", nullable: false),
-                    requisites = table.Column<string>(type: "jsonb", nullable: false)
+                    weight_value = table.Column<double>(type: "double precision", nullable: false)
                 },
                 constraints: table =>
                 {

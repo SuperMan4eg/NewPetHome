@@ -10,6 +10,8 @@ namespace NewPetHome.Volunteers.Domain.Entities;
 public class Pet : Entity<PetId>, ISoftDeletable
 {
     private bool _isDeleted = false;
+    private List<Photo> _photos = [];
+    private List<Requisite> _requisites = [];
 
     private Pet(PetId id) : base(id)
     {
@@ -30,8 +32,8 @@ public class Pet : Entity<PetId>, ISoftDeletable
         DateTime birthDate,
         bool isVaccinated,
         PetStatus? status,
-        ValueObjectList<Photo>? photos,
-        ValueObjectList<Requisite> requisites) : base(id)
+        IEnumerable<Requisite> requisites,
+        IEnumerable<Photo>? photos = null) : base(id)
     {
         Name = name;
         Description = description;
@@ -47,8 +49,8 @@ public class Pet : Entity<PetId>, ISoftDeletable
         IsVaccinated = isVaccinated;
         Status = status;
         CreatedDate = DateTime.Now.ToUniversalTime();
-        Photos = photos ?? new ValueObjectList<Photo>([]);
-        Requisites = requisites;
+        _requisites = requisites.ToList();
+        _photos = photos?.ToList() ?? [];
     }
 
     public Name Name { get; private set; } = default!;
@@ -66,14 +68,14 @@ public class Pet : Entity<PetId>, ISoftDeletable
     public bool IsVaccinated { get; private set; }
     public PetStatus? Status { get; private set; }
     public DateTime CreatedDate { get; private set; }
-    public ValueObjectList<Photo> Photos { get; private set; } = default!;
-    public ValueObjectList<Requisite> Requisites { get; private set; }
+    public IReadOnlyList<Photo> Photos => _photos;
+    public IReadOnlyList<Requisite> Requisites => _requisites;
 
-    public void UpdatePhotos(ValueObjectList<Photo> photos) =>
-        Photos = photos;
+    public void UpdatePhotos(IEnumerable<Photo> photos) =>
+        _photos = photos.ToList();
 
-    public void UpdateRequisites(ValueObjectList<Requisite> requisites) =>
-        Requisites = requisites;
+    public void UpdateRequisites(IEnumerable<Requisite> requisites) =>
+        _requisites = requisites.ToList();
 
     public void SetPosition(Position position) =>
         Position = position;
@@ -101,10 +103,10 @@ public class Pet : Entity<PetId>, ISoftDeletable
             return newPosition.Error;
 
         Position = newPosition.Value;
-        
+
         return Result.Success<Error>();
     }
-    
+
     public UnitResult<Error> MoveBack()
     {
         var newPosition = Position.Back();
@@ -112,7 +114,7 @@ public class Pet : Entity<PetId>, ISoftDeletable
             return newPosition.Error;
 
         Position = newPosition.Value;
-        
+
         return Result.Success<Error>();
     }
 }

@@ -14,18 +14,18 @@ public class CreateSpecieHandler : ICommandHandler<Guid, CreateSpecieCommand>
 {
     private readonly IValidator<CreateSpecieCommand> _validator;
     private readonly ISpeciesRepository _speciesRepository;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly ISpeciesUnitOfWork _speciesUnitOfWork;
     private readonly ILogger<CreateSpecieHandler> _logger;
 
     public CreateSpecieHandler(
         IValidator<CreateSpecieCommand> validator,
         ISpeciesRepository speciesRepository,
-        IUnitOfWork unitOfWork,
+        ISpeciesUnitOfWork speciesUnitOfWork,
         ILogger<CreateSpecieHandler> logger)
     {
         _validator = validator;
         _speciesRepository = speciesRepository;
-        _unitOfWork = unitOfWork;
+        _speciesUnitOfWork = speciesUnitOfWork;
         _logger = logger;
     }
 
@@ -46,7 +46,7 @@ public class CreateSpecieHandler : ICommandHandler<Guid, CreateSpecieCommand>
         if (specieResult.IsFailure)
             return specieResult.Error.ToErrorList();
 
-        await _unitOfWork.SaveChanges(cancellationToken);
+        await _speciesUnitOfWork.SaveChanges(cancellationToken);
 
         _logger.LogInformation("Specie created with id: {specieId}.", specieResult.Value);
 
