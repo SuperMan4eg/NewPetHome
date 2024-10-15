@@ -1,15 +1,16 @@
 using System.Data;
 using Microsoft.EntityFrameworkCore.Storage;
 using NewPetHome.Core.Abstraction;
+using NewPetHome.Volunteers.Application;
 using NewPetHome.Volunteers.Infrastructure.DbContexts;
 
 namespace NewPetHome.Volunteers.Infrastructure;
 
-public class UnitOfWork : IUnitOfWork
+public class VolunteersUnitOfWork : IVolunteersUnitOfWork
 {
     private readonly VolunteersWriteDbContext _dbContext;
 
-    public UnitOfWork(VolunteersWriteDbContext dbContext)
+    public VolunteersUnitOfWork(VolunteersWriteDbContext dbContext)
     {
         _dbContext = dbContext;
     }

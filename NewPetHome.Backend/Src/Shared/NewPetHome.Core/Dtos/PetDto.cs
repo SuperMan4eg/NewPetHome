@@ -5,7 +5,7 @@ public class PetDto
     public Guid Id { get; init; }
 
     public bool IsDeleted { get; init; }
-    
+
     public Guid VolunteerId { get; init; }
 
     public string Name { get; init; } = string.Empty;
@@ -44,7 +44,7 @@ public class PetDto
 
     public DateTime CreatedDate { get; init; }
 
-    public string Photos { get; init; } = string.Empty;
+    public PetPhotoDto[] Photos { get; init; } = [];
 
     public RequisiteDto[] Requisites { get; init; } = [];
 }

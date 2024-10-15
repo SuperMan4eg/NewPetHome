@@ -31,6 +31,12 @@ public class PetDtoConfiguration : IEntityTypeConfiguration<PetDto>
         builder.Property(p => p.CreatedDate)
             .IsRequired();
 
+        builder.Property(p => p.Photos)
+            .HasConversion(
+                values => JsonSerializer.Serialize(string.Empty, JsonSerializerOptions.Default),
+                json => JsonSerializer.Deserialize<PetPhotoDto[]>(json, JsonSerializerOptions.Default)!)
+            .HasColumnName("photos");
+        
         builder.Property(p => p.Requisites)
             .HasConversion(
                 values => JsonSerializer.Serialize(string.Empty, JsonSerializerOptions.Default),

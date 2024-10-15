@@ -14,19 +14,19 @@ public class AddBreedHandler : ICommandHandler<Guid, AddBreedCommand>
 {
     private readonly IValidator<AddBreedCommand> _validator;
     private readonly ISpeciesRepository _speciesRepository;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly ISpeciesUnitOfWork _speciesUnitOfWork;
     private readonly ILogger<AddBreedHandler> _logger;
 
     public AddBreedHandler(
         IValidator<AddBreedCommand> validator,
         ISpeciesRepository speciesRepository,
-        IUnitOfWork unitOfWork,
+        ISpeciesUnitOfWork speciesUnitOfWork,
         ILogger<AddBreedHandler> logger)
     {
         _validator = validator;
-        _unitOfWork = unitOfWork;
         _logger = logger;
         _speciesRepository = speciesRepository;
+        _speciesUnitOfWork = speciesUnitOfWork;
     }
 
     public async Task<Result<Guid, ErrorList>> Handle(
@@ -38,7 +38,7 @@ public class AddBreedHandler : ICommandHandler<Guid, AddBreedCommand>
             return validationResult.ToErrorList();
 
         var specieResult = await _speciesRepository
-            .GetById(SpecieId.Create(command.SpecieId), cancellationToken);
+            .GetSpecieById(SpecieId.Create(command.SpecieId), cancellationToken);
         if (specieResult.IsFailure)
             return specieResult.Error.ToErrorList();
 
@@ -51,7 +51,7 @@ public class AddBreedHandler : ICommandHandler<Guid, AddBreedCommand>
         if (breedResult.IsFailure)
             return breedResult.Error.ToErrorList();
 
-        await _unitOfWork.SaveChanges(cancellationToken);
+        await _speciesUnitOfWork.SaveChanges(cancellationToken);
 
         _logger.LogInformation("Breed added with id: {BreedId}.", breedResult.Value);
 

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NewPetHome.Core.Dtos;
+using NewPetHome.Core.Extensions;
 using NewPetHome.SharedKernel;
 using NewPetHome.SharedKernel.ValueObjects;
 using NewPetHome.SharedKernel.ValueObjects.Ids;
@@ -72,33 +73,15 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Property(v => v.Requisites)
-            .HasConversion(
-                requisites => JsonSerializer.Serialize(requisites
-                    .Select(r => new RequisiteDto(r.Name, r.Description)), JsonSerializerOptions.Default),
-                json => JsonSerializer.Deserialize<List<RequisiteDto>>(json, JsonSerializerOptions.Default)!
-                    .Select(r => Requisite.Create(r.Name, r.Description).Value)
-                    .ToList(),
-                new ValueComparer<IReadOnlyList<Requisite>>(
-                    (c1, c2) => c1!.SequenceEqual(c2!),
-                    c => c.Aggregate(0, (a, v) =>
-                        HashCode.Combine(a, v.GetHashCode())),
-                    c => (IReadOnlyList<Requisite>)c.ToList()))
-            .HasColumnType("jsonb")
+            .ValueObjectsCollectionJsonConversion(
+                requisite => new RequisiteDto(requisite.Description, requisite.Name),
+                dto => Requisite.Create(dto.Name, dto.Description).Value)
             .HasColumnName("requisites");
 
         builder.Property(v => v.SocialNetworks)
-            .HasConversion(
-                socialNetworks => JsonSerializer.Serialize(socialNetworks
-                    .Select(s => new SocialNetworkDto(s.Name, s.Url)), JsonSerializerOptions.Default),
-                json => JsonSerializer.Deserialize<List<SocialNetworkDto>>(json, JsonSerializerOptions.Default)!
-                    .Select(s => SocialNetwork.Create(s.Name, s.Url).Value)
-                    .ToList(),
-                new ValueComparer<IReadOnlyList<SocialNetwork>>(
-                    (c1, c2) => c1!.SequenceEqual(c2!),
-                    c => c.Aggregate(0, (a, v) =>
-                        HashCode.Combine(a, v.GetHashCode())),
-                    c => (IReadOnlyList<SocialNetwork>)c.ToList()))
-            .HasColumnType("jsonb")
+            .ValueObjectsCollectionJsonConversion(
+                socialNetworks => new SocialNetworkDto(socialNetworks.Name, socialNetworks.Url),
+                dto => SocialNetwork.Create(dto.Name, dto.Url).Value)
             .HasColumnName("social_networks");
 
         builder.Property<bool>("_isDeleted")

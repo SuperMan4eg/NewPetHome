@@ -1,7 +1,8 @@
+using Microsoft.AspNetCore.Http;
 using NewPetHome.Core.Dtos;
 using NewPetHome.Volunteers.Contracts.Converters;
 
-namespace NewPetHome.Web.Processors;
+namespace NewPetHome.Volunteers.Presentation.Processors;
 
 public class FormFileConverter : IFormFileConverter
 {

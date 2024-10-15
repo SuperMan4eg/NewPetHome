@@ -29,7 +29,7 @@ public class SpecieConfiguration : IEntityTypeConfiguration<Specie>
 
         builder.HasMany(s => s.Breeds)
             .WithOne()
-            .HasForeignKey("specie_id")
+            .HasForeignKey(b => b.SpecieId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Navigation(s => s.Breeds).AutoInclude();

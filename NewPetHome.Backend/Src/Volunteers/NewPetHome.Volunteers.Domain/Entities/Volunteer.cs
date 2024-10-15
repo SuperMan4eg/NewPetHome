@@ -26,8 +26,8 @@ public sealed class Volunteer : Entity<VolunteerId>, ISoftDeletable
         Email email,
         Experience experience,
         PhoneNumber phoneNumber,
-        ValueObjectList<Requisite> requisites,
-        ValueObjectList<SocialNetwork> socialNetworks) :
+        List<Requisite> requisites,
+        List<SocialNetwork> socialNetworks) :
         base(id)
     {
         FullName = fullName;

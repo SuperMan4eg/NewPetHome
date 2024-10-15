@@ -7,7 +7,7 @@ using NewPetHome.Species.Applications;
 
 namespace NewPetHome.Species.Infrastructure.DbContexts;
 
-public class ReadDbContext(IConfiguration configuration) : DbContext, IReadDbContext
+public class SpeciesReadDbContext(IConfiguration configuration) : DbContext, ISpeciesReadDbContext
 {
     public IQueryable<SpecieDto> Species => Set<SpecieDto>();
     public IQueryable<BreedDto> Breeds => Set<BreedDto>();

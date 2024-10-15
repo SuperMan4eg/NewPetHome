@@ -28,7 +28,7 @@ namespace NewPetHome.Species.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    specie_id = table.Column<Guid>(type: "uuid", nullable: true),
+                    specie_id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>

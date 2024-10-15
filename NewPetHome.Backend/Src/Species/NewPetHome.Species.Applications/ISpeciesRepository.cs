@@ -12,7 +12,11 @@ public interface ISpeciesRepository
 
     Task<Guid> Delete(Specie specie, CancellationToken cancellationToken = default);
 
-    Task<Result<Specie, Error>> GetById(SpecieId specieId, CancellationToken cancellationToken = default);
+    void Save(Specie specie, CancellationToken cancellationToken = default);
+    
+    Task<Result<Specie, Error>> GetSpecieById(SpecieId specieId, CancellationToken cancellationToken = default);
 
-    Task<Result<Specie, Error>> GetByName(Name name, CancellationToken cancellationToken = default);
+    Task<Result<Specie, Error>> GetSpecieByName(Name name, CancellationToken cancellationToken = default);
+
+    
 }

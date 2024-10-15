@@ -12,17 +12,17 @@ public class UpdateRequisitesHandler : ICommandHandler<Guid, UpdateRequisitesCom
 {
     private readonly ILogger<UpdateRequisitesHandler> _logger;
     private readonly IVolunteersRepository _volunteersRepository;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IVolunteersUnitOfWork _volunteersUnitOfWork;
     private readonly IValidator<UpdateRequisitesCommand> _validator;
 
     public UpdateRequisitesHandler(
         IVolunteersRepository volunteersRepository,
-        IUnitOfWork unitOfWork,
+        IVolunteersUnitOfWork volunteersUnitOfWork,
         IValidator<UpdateRequisitesCommand> validator,
         ILogger<UpdateRequisitesHandler> logger)
     {
         _volunteersRepository = volunteersRepository;
-        _unitOfWork = unitOfWork;
+        _volunteersUnitOfWork = volunteersUnitOfWork;
         _validator = validator;
         _logger = logger;
     }
@@ -44,7 +44,7 @@ public class UpdateRequisitesHandler : ICommandHandler<Guid, UpdateRequisitesCom
 
         volunteerResult.Value.UpdateRequisites(requisites);
 
-        await _unitOfWork.SaveChanges(cancellationToken);
+        await _volunteersUnitOfWork.SaveChanges(cancellationToken);
 
         _logger.LogInformation("Volunteer requisites update with id: {VolunteerId}.", command.VolunteerId);
 

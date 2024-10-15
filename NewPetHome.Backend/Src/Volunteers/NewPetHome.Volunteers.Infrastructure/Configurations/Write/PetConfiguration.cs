@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using NewPetHome.Core.Dtos;
+using NewPetHome.Core.Extensions;
 using NewPetHome.SharedKernel;
 using NewPetHome.SharedKernel.ValueObjects;
 using NewPetHome.SharedKernel.ValueObjects.Ids;
@@ -123,39 +125,17 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
         builder.Property(p => p.CreatedDate)
             .IsRequired();
 
-        builder.OwnsOne(p => p.Photos, pb =>
-        {
-            pb.ToJson();
+        builder.Property(v => v.Photos)
+            .ValueObjectsCollectionJsonConversion(
+                photo => new PetPhotoDto { PathToStorage = photo.Path.Path, IsMain = photo.IsMain },
+                dto => Photo.Create(FilePath.Create(dto.PathToStorage).Value, dto.IsMain).Value)
+            .HasColumnName("photos");
 
-            pb.OwnsMany(p => p.Values, phb =>
-            {
-                phb.Property(d => d.Path)
-                    .HasConversion(
-                        p => p.Path,
-                        value => FilePath.Create(value).Value)
-                    .IsRequired()
-                    .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
-
-                phb.Property(p => p.IsMain)
-                    .IsRequired();
-            });
-        });
-
-        builder.OwnsOne(p => p.Requisites, rb =>
-        {
-            rb.ToJson();
-
-            rb.OwnsMany(r => r.Values, reb =>
-            {
-                reb.Property(d => d.Name)
-                    .IsRequired()
-                    .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
-
-                reb.Property(d => d.Description)
-                    .IsRequired()
-                    .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
-            });
-        });
+        builder.Property(v => v.Requisites)
+            .ValueObjectsCollectionJsonConversion(
+                requisite => new RequisiteDto(requisite.Description, requisite.Name),
+                dto => Requisite.Create(dto.Name, dto.Description).Value)
+            .HasColumnName("requisites");
 
         builder.Property<bool>("_isDeleted")
             .UsePropertyAccessMode(PropertyAccessMode.Field)

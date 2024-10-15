@@ -16,5 +16,6 @@ public class Breed : Entity<BreedId>
         
     }
 
+    public SpecieId SpecieId { get; private set; } = default!;
     public Name Name { get; private set; } = default!;
 }

@@ -29,7 +29,7 @@ namespace NewPetHome.Species.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<Guid?>("specie_id")
+                    b.Property<Guid>("SpecieId")
                         .HasColumnType("uuid")
                         .HasColumnName("specie_id");
 
@@ -47,7 +47,7 @@ namespace NewPetHome.Species.Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("pk_breeds");
 
-                    b.HasIndex("specie_id")
+                    b.HasIndex("SpecieId")
                         .HasDatabaseName("ix_breeds_specie_id");
 
                     b.ToTable("breeds", (string)null);
@@ -80,8 +80,9 @@ namespace NewPetHome.Species.Infrastructure.Migrations
                 {
                     b.HasOne("NewPetHome.Species.Domain.Specie", null)
                         .WithMany("Breeds")
-                        .HasForeignKey("specie_id")
+                        .HasForeignKey("SpecieId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
                         .HasConstraintName("fk_breeds_species_specie_id");
                 });
 

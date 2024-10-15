@@ -2,7 +2,7 @@ using NewPetHome.Core.Dtos;
 
 namespace NewPetHome.Volunteers.Application;
 
-public interface IReadDbContext
+public interface IVolunteersReadDbContext
 {
     IQueryable<VolunteerDto> Volunteers { get; }
 

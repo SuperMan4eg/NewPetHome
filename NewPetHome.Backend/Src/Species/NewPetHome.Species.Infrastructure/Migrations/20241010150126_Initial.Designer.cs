@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NewPetHome.Species.Infrastructure.Migrations
 {
     [DbContext(typeof(SpeciesWriteDbContext))]
-    [Migration("20241009081813_Initial")]
+    [Migration("20241010150126_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -32,7 +32,7 @@ namespace NewPetHome.Species.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<Guid?>("specie_id")
+                    b.Property<Guid>("SpecieId")
                         .HasColumnType("uuid")
                         .HasColumnName("specie_id");
 
@@ -50,7 +50,7 @@ namespace NewPetHome.Species.Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("pk_breeds");
 
-                    b.HasIndex("specie_id")
+                    b.HasIndex("SpecieId")
                         .HasDatabaseName("ix_breeds_specie_id");
 
                     b.ToTable("breeds", (string)null);
@@ -83,8 +83,9 @@ namespace NewPetHome.Species.Infrastructure.Migrations
                 {
                     b.HasOne("NewPetHome.Species.Domain.Specie", null)
                         .WithMany("Breeds")
-                        .HasForeignKey("specie_id")
+                        .HasForeignKey("SpecieId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
                         .HasConstraintName("fk_breeds_species_specie_id");
                 });
 
