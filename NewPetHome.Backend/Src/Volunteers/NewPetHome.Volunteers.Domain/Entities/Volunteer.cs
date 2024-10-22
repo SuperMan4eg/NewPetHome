@@ -117,13 +117,13 @@ public sealed class Volunteer : Entity<VolunteerId>, ISoftDeletable
         _pets.Remove(pet);
     }
 
-    public UnitResult<Error> UpdatePetMainPhoto(Pet pet, FilePath photoPath)
+    public UnitResult<Error> UpdatePetMainPhoto(Pet pet, Photo photo)
     {
         var petResult = _pets.FirstOrDefault(p => p.Id == pet.Id);
         if (petResult is null)
             return Errors.General.NotFound(pet.Id);
 
-        var updateResult = petResult.UpdateMainPhoto(photoPath);
+        var updateResult = petResult.UpdateMainPhoto(photo);
         if(updateResult.IsFailure)
             return updateResult.Error;
 

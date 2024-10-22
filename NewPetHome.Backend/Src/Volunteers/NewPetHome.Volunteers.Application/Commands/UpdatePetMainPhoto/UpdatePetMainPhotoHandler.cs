@@ -49,11 +49,11 @@ public class UpdatePetMainPhotoHandler : ICommandHandler<Guid, UpdatePetMainPhot
         if (filePathResult.IsFailure)
             return filePathResult.Error.ToErrorList();
 
-        // var petPhotoResult = Photo.Create(filePathResult.Value, true);
-        // if (petPhotoResult.IsFailure)
-        //     return petPhotoResult.Error.ToErrorList();
+        var petPhotoResult = Photo.Create(filePathResult.Value, true);
+        if (petPhotoResult.IsFailure)
+        return petPhotoResult.Error.ToErrorList();
 
-        var updateResult = volunteerResult.Value.UpdatePetMainPhoto(petResult.Value, filePathResult.Value);
+        var updateResult = volunteerResult.Value.UpdatePetMainPhoto(petResult.Value, petPhotoResult.Value);
         if (updateResult.IsFailure)
             return updateResult.Error.ToErrorList();
         

@@ -13,6 +13,36 @@ namespace NewPetHome.Species.Presentation;
 
 public class SpeciesController : ApplicationController
 {
+    [HttpGet]
+    public async Task<ActionResult> Get(
+        [FromQuery] GetAllSpeciesWithPaginationRequest request,
+        [FromServices] GetAllSpecieWithPaginationHandler handler,
+        CancellationToken cancellationToken = default)
+    {
+        var query = new GetAllSpeciesWithPaginationQuery(request.SortDirection, request.Page, request.PageSize);
+
+        var result = await handler.Handle(query, cancellationToken);
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Ok(result.Value);
+    }
+
+    [HttpGet("breeds")]
+    public async Task<ActionResult> GetBreedBySpecieId(
+        [FromQuery] GetBreedsBySpecieIdRequest request,
+        [FromServices] GetBreedsBySpecieIdHandler handler,
+        CancellationToken cancellationToken = default)
+    {
+        var query = new GetBreedsBySpecieIdQuery(request.SpecieId, request.Page, request.PageSize);
+
+        var result = await handler.Handle(query, cancellationToken);
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Ok(result.Value);
+    }
+
     [HttpPost]
     public async Task<ActionResult<Guid>> Create(
         [FromServices] CreateSpecieHandler handler,
@@ -69,36 +99,6 @@ public class SpeciesController : ApplicationController
         var command = new DeleteSpecieCommand(request.SpecieId);
 
         var result = await handler.Handle(command, cancellationToken);
-        if (result.IsFailure)
-            return result.Error.ToResponse();
-
-        return Ok(result.Value);
-    }
-
-    [HttpGet]
-    public async Task<ActionResult> Get(
-        [FromQuery] GetAllSpeciesWithPaginationRequest request,
-        [FromServices] GetAllSpecieWithPaginationHandler handler,
-        CancellationToken cancellationToken = default)
-    {
-        var query = new GetAllSpeciesWithPaginationQuery(request.SortDirection, request.Page, request.PageSize);
-
-        var result = await handler.Handle(query, cancellationToken);
-        if (result.IsFailure)
-            return result.Error.ToResponse();
-
-        return Ok(result.Value);
-    }
-    
-    [HttpGet("breeds")]
-    public async Task<ActionResult> GetBreedBySpecieId(
-        [FromQuery] GetBreedsBySpecieIdRequest request,
-        [FromServices] GetBreedsBySpecieIdHandler handler,
-        CancellationToken cancellationToken = default)
-    {
-        var query = new GetBreedsBySpecieIdQuery(request.SpecieId, request.Page, request.PageSize);
-
-        var result = await handler.Handle(query, cancellationToken);
         if (result.IsFailure)
             return result.Error.ToResponse();
 

@@ -112,21 +112,21 @@ public class Pet : Entity<PetId>, ISoftDeletable
         _photos.AddRange(photos.ToList());
     }
 
-    internal UnitResult<Error> UpdateMainPhoto(FilePath photoPath)
+    internal UnitResult<Error> UpdateMainPhoto(Photo updatedPhoto)
     {
-        var photoExists = _photos.FirstOrDefault(p => p.Path == photoPath);
+        var photoExists = _photos.FirstOrDefault(p => p.Path == updatedPhoto.Path);
         if (photoExists is null)
             return Errors.General.NotFound();
 
-        foreach (var photo in _photos)
-        {
-            photo.UnsetAsMain();
-        }
+        _photos = _photos
+            .Where(p => p.Path != updatedPhoto.Path)
+            .Select(p => Photo.Create(p.Path, false).Value)
+            .ToList();
 
-        photoExists.SetAsMain();
+        _photos.Add(Photo.Create(updatedPhoto.Path, true).Value);
 
-        _photos = _photos.OrderByDescending(p=>p.IsMain).ToList();
-        
+        _photos = _photos.OrderByDescending(p => p.IsMain).ToList();
+
         return Result.Success<Error>();
     }
 
