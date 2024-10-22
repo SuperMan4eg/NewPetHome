@@ -119,13 +119,9 @@ public class Pet : Entity<PetId>, ISoftDeletable
             return Errors.General.NotFound();
 
         _photos = _photos
-            .Where(p => p.Path != updatedPhoto.Path)
-            .Select(p => Photo.Create(p.Path, false).Value)
+            .Select(p => Photo.Create(p.Path, p.Path == updatedPhoto.Path).Value)
+            .OrderByDescending(p => p.IsMain)
             .ToList();
-
-        _photos.Add(Photo.Create(updatedPhoto.Path, true).Value);
-
-        _photos = _photos.OrderByDescending(p => p.IsMain).ToList();
 
         return Result.Success<Error>();
     }
