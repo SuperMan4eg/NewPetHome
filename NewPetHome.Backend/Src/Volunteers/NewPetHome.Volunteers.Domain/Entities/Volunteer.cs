@@ -102,6 +102,34 @@ public sealed class Volunteer : Entity<VolunteerId>, ISoftDeletable
             pet.Restore();
     }
 
+    public void SoftDeletePet(PetId id)
+    {
+        _pets.FirstOrDefault(p => p.Id == id)?.SoftDelete();
+    }
+
+    public void RestorePet(PetId id)
+    {
+        _pets.FirstOrDefault(p => p.Id == id)?.Restore();
+    }
+
+    public void HardDeletePet(Pet pet)
+    {
+        _pets.Remove(pet);
+    }
+
+    public UnitResult<Error> UpdatePetMainPhoto(Pet pet, FilePath photoPath)
+    {
+        var petResult = _pets.FirstOrDefault(p => p.Id == pet.Id);
+        if (petResult is null)
+            return Errors.General.NotFound(pet.Id);
+
+        var updateResult = petResult.UpdateMainPhoto(photoPath);
+        if(updateResult.IsFailure)
+            return updateResult.Error;
+
+        return Result.Success<Error>();
+    }
+
     public UnitResult<Error> AddPet(Pet pet)
     {
         var positionResult = Position.Create(_pets.Count + 1);
@@ -184,4 +212,58 @@ public sealed class Volunteer : Entity<VolunteerId>, ISoftDeletable
     public int CountPetsLookingHome() => _pets.Count(p => p.Status == PetStatus.LookingHome);
 
     public int CountPetsInTreatment() => _pets.Count(p => p.Status == PetStatus.InTreatment);
+
+    public void AddPetPhotos(PetId petId, IEnumerable<Photo> petPhotos)
+    {
+        _pets.FirstOrDefault(p => p.Id == petId)?.AddPhotos(petPhotos);
+    }
+
+    public void DeletePetPhotos(PetId petId, IEnumerable<Photo> petPhotos)
+    {
+        _pets.FirstOrDefault(p => p.Id == petId)?.DeletePhotos(petPhotos);
+    }
+
+    public UnitResult<Error> IsPetExist(PetId petId)
+    {
+        var pet = _pets.FirstOrDefault(p => p.Id == petId);
+        if (pet is null)
+            return Errors.General.NotFound(petId.Value);
+
+        return Result.Success<Error>();
+    }
+
+    public void UpdatePetInfo(PetId petId, Name name,
+        Description description,
+        TypeDetails typeDetails,
+        Color color,
+        HealthInfo healthInfo,
+        Address address,
+        Weight weight,
+        Height height,
+        PhoneNumber phoneNumber,
+        bool isCastrated,
+        DateTime birthDate,
+        bool isVaccinated,
+        IEnumerable<Requisite> requisites)
+    {
+        _pets.FirstOrDefault(p => p.Id == petId)?.UpdateInfo(
+            name,
+            description,
+            typeDetails,
+            color,
+            healthInfo,
+            address,
+            weight,
+            height,
+            phoneNumber,
+            isCastrated,
+            birthDate,
+            isVaccinated,
+            requisites);
+    }
+
+    public void UpdatePetStatus(PetId petId, PetStatus status)
+    {
+        _pets.FirstOrDefault(p => p.Id == petId)?.UpdateStatus(status);
+    }
 }

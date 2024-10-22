@@ -53,9 +53,10 @@ public class Pet : Entity<PetId>, ISoftDeletable
         _photos = photos?.ToList() ?? [];
     }
 
+    public VolunteerId VolunteerId { get; private set; } = null!;
     public Name Name { get; private set; } = default!;
     public Description Description { get; private set; } = default!;
-    public Position Position { get; private set; }
+    public Position Position { get; private set; } = default!;
     public TypeDetails TypeDetails { get; private set; } = default!;
     public Color Color { get; private set; } = default!;
     public HealthInfo HealthInfo { get; private set; } = default!;
@@ -71,14 +72,94 @@ public class Pet : Entity<PetId>, ISoftDeletable
     public IReadOnlyList<Photo> Photos => _photos;
     public IReadOnlyList<Requisite> Requisites => _requisites;
 
-    public void UpdatePhotos(IEnumerable<Photo> photos) =>
-        _photos = photos.ToList();
+    internal void UpdateInfo(
+        Name name,
+        Description description,
+        TypeDetails typeDetails,
+        Color color,
+        HealthInfo healthInfo,
+        Address address,
+        Weight weight,
+        Height height,
+        PhoneNumber phoneNumber,
+        bool isCastrated,
+        DateTime birthDate,
+        bool isVaccinated,
+        IEnumerable<Requisite> requisites)
+    {
+        Name = name;
+        Description = description;
+        TypeDetails = typeDetails;
+        Color = color;
+        HealthInfo = healthInfo;
+        Address = address;
+        Weight = weight;
+        Height = height;
+        PhoneNumber = phoneNumber;
+        IsCastrated = isCastrated;
+        BirthDate = birthDate;
+        IsVaccinated = isVaccinated;
+        _requisites = requisites.ToList();
+    }
 
-    public void UpdateRequisites(IEnumerable<Requisite> requisites) =>
+    internal void DeletePhotos(IEnumerable<Photo> photos)
+    {
+        _photos.RemoveAll(photos.Contains);
+    }
+
+    internal void AddPhotos(IEnumerable<Photo> photos)
+    {
+        _photos.AddRange(photos.ToList());
+    }
+
+    internal UnitResult<Error> UpdateMainPhoto(FilePath photoPath)
+    {
+        var photoExists = _photos.FirstOrDefault(p => p.Path == photoPath);
+        if (photoExists is null)
+            return Errors.General.NotFound();
+
+        foreach (var photo in _photos)
+        {
+            photo.UnsetAsMain();
+        }
+
+        photoExists.SetAsMain();
+
+        _photos = _photos.OrderByDescending(p=>p.IsMain).ToList();
+        
+        return Result.Success<Error>();
+    }
+
+    internal void UpdateRequisites(IEnumerable<Requisite> requisites) =>
         _requisites = requisites.ToList();
 
-    public void SetPosition(Position position) =>
+    internal void UpdateStatus(PetStatus status) =>
+        Status = status;
+
+    internal void SetPosition(Position position) =>
         Position = position;
+
+    internal UnitResult<Error> MoveForward()
+    {
+        var newPosition = Position.Forward();
+        if (newPosition.IsFailure)
+            return newPosition.Error;
+
+        Position = newPosition.Value;
+
+        return Result.Success<Error>();
+    }
+
+    internal UnitResult<Error> MoveBack()
+    {
+        var newPosition = Position.Back();
+        if (newPosition.IsFailure)
+            return newPosition.Error;
+
+        Position = newPosition.Value;
+
+        return Result.Success<Error>();
+    }
 
     public void SoftDelete()
     {
@@ -94,27 +175,5 @@ public class Pet : Entity<PetId>, ISoftDeletable
             return;
 
         _isDeleted = false;
-    }
-
-    public UnitResult<Error> MoveForward()
-    {
-        var newPosition = Position.Forward();
-        if (newPosition.IsFailure)
-            return newPosition.Error;
-
-        Position = newPosition.Value;
-
-        return Result.Success<Error>();
-    }
-
-    public UnitResult<Error> MoveBack()
-    {
-        var newPosition = Position.Back();
-        if (newPosition.IsFailure)
-            return newPosition.Error;
-
-        Position = newPosition.Value;
-
-        return Result.Success<Error>();
     }
 }
