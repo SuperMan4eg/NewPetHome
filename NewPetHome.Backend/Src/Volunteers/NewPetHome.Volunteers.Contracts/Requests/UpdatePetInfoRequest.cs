@@ -2,7 +2,7 @@ using NewPetHome.Core.Dtos;
 
 namespace NewPetHome.Volunteers.Contracts.Requests;
 
-public record AddPetRequest(
+public record UpdatePetInfoRequest(
     string Name,
     string Description,
     Guid SpecieId,
@@ -16,5 +16,4 @@ public record AddPetRequest(
     bool IsCastrated,
     DateTime BirthDate,
     bool IsVaccinated,
-    string Status,
     IEnumerable<RequisiteDto> Requisites);

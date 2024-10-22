@@ -59,13 +59,13 @@ namespace NewPetHome.Volunteers.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("status");
 
+                    b.Property<Guid>("VolunteerId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("volunteer_id");
+
                     b.Property<bool>("_isDeleted")
                         .HasColumnType("boolean")
                         .HasColumnName("is_deleted");
-
-                    b.Property<Guid?>("volunteer_id")
-                        .HasColumnType("uuid")
-                        .HasColumnName("volunteer_id");
 
                     b.ComplexProperty<Dictionary<string, object>>("Address", "NewPetHome.Volunteers.Domain.Entities.Pet.Address#Address", b1 =>
                         {
@@ -173,7 +173,7 @@ namespace NewPetHome.Volunteers.Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("pk_pets");
 
-                    b.HasIndex("volunteer_id")
+                    b.HasIndex("VolunteerId")
                         .HasDatabaseName("ix_pets_volunteer_id");
 
                     b.ToTable("pets", (string)null);
@@ -267,8 +267,9 @@ namespace NewPetHome.Volunteers.Infrastructure.Migrations
                 {
                     b.HasOne("NewPetHome.Volunteers.Domain.Entities.Volunteer", null)
                         .WithMany("Pets")
-                        .HasForeignKey("volunteer_id")
+                        .HasForeignKey("VolunteerId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
                         .HasConstraintName("fk_pets_volunteers_volunteer_id");
 
                     b.OwnsOne("NewPetHome.SharedKernel.ValueObjects.TypeDetails", "TypeDetails", b1 =>

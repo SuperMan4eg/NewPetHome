@@ -7,4 +7,7 @@ public class Constants
     public const int MAX_PHONE_NUMBER_LENGTH = 10;
 
     public const string DATABASE = "Database";
+    public const string BUCKET_NAME = "photos";
+
+    public static readonly string[] PERMITTED_PET_STATUSES_FROM_VOLUNTEER = ["LookingHome", "InTreatment"];
 }

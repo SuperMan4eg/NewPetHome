@@ -2,7 +2,7 @@ using CSharpFunctionalExtensions;
 
 namespace NewPetHome.SharedKernel.ValueObjects;
 
-public record FilePath
+public class FilePath : ValueObject
 {
     private FilePath(string path)
     {
@@ -21,5 +21,10 @@ public record FilePath
     public static Result<FilePath, Error> Create(string fullPath)
     {
         return new FilePath(fullPath);
+    }
+
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Path;
     }
 }

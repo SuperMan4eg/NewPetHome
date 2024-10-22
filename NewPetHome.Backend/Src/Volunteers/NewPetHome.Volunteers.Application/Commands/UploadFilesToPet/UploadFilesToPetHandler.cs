@@ -86,7 +86,7 @@ public class UploadFilesToPetHandler : ICommandHandler<Guid, UploadFilesToPetCom
             .Select(f => Photo.Create(f, false).Value)
             .ToList();
 
-        petResult.Value.UpdatePhotos(petPhotos);
+        volunteerResult.Value.AddPetPhotos(petId, petPhotos);
 
         await _volunteersUnitOfWork.SaveChanges(cancellationToken);
 

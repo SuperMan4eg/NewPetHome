@@ -36,6 +36,7 @@ namespace NewPetHome.Volunteers.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
+                    volunteer_id = table.Column<Guid>(type: "uuid", nullable: false),
                     species_id = table.Column<Guid>(type: "uuid", nullable: false),
                     breed_id = table.Column<Guid>(type: "uuid", nullable: false),
                     is_castrated = table.Column<bool>(type: "boolean", nullable: false),
@@ -46,7 +47,6 @@ namespace NewPetHome.Volunteers.Infrastructure.Migrations
                     photos = table.Column<string>(type: "jsonb", nullable: false),
                     requisites = table.Column<string>(type: "jsonb", nullable: false),
                     is_deleted = table.Column<bool>(type: "boolean", nullable: false),
-                    volunteer_id = table.Column<Guid>(type: "uuid", nullable: true),
                     city = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     house_number = table.Column<int>(type: "integer", nullable: false),
                     street = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
