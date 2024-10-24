@@ -14,6 +14,8 @@ using NewPetHome.Volunteers.Application.Commands.UpdatePetStatus;
 using NewPetHome.Volunteers.Application.Commands.UpdateRequisites;
 using NewPetHome.Volunteers.Application.Commands.UpdateSocialNetworks;
 using NewPetHome.Volunteers.Application.Commands.UploadFilesToPet;
+using NewPetHome.Volunteers.Application.Queries.GetFilteredPetsWithPagination;
+using NewPetHome.Volunteers.Application.Queries.GetPetById;
 using NewPetHome.Volunteers.Application.Queries.GetVolunteerById;
 using NewPetHome.Volunteers.Application.Queries.GetVolunteersWithPagination;
 using NewPetHome.Volunteers.Contracts.Converters;
@@ -50,6 +52,56 @@ public class VolunteersController : ApplicationController
         CancellationToken cancellationToken = default)
     {
         var query = new GetVolunteerByIdQuery(request.Id);
+
+        var result = await handler.Handle(query, cancellationToken);
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Ok(result.Value);
+    }
+
+    [HttpGet("pets")]
+    public async Task<ActionResult> GetPets(
+        [FromQuery] GetFilteredPetsWithPaginationRequest request,
+        [FromServices] GetFilteredPetsWithPaginationHandler handler,
+        CancellationToken cancellationToken = default)
+    {
+        var query = new GetFilteredPetsWithPaginationQuery(
+            request.VolunteerId,
+            request.Name,
+            request.AgeFrom,
+            request.AgeTo,
+            request.WeightFrom,
+            request.WeightTo,
+            request.HeightFrom,
+            request.HeightTo,
+            request.SpeciesId,
+            request.BreedId,
+            request.Color,
+            request.IsCastrated,
+            request.IsVaccinated,
+            request.Status,
+            request.City,
+            request.Street,
+            request.SortBy,
+            request.SortDirection,
+            request.Page,
+            request.PageSize);
+
+        var result = await handler.Handle(query, cancellationToken);
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Ok(result.Value);
+    }
+    
+    [HttpGet("{petId:guid}")]
+    public async Task<ActionResult> GetPetById(
+        [FromRoute] Guid petId,
+        [FromServices] GetPetByIdHandler handler,
+        CancellationToken cancellationToken = default)
+    {
+        var query = new GetPetByIdQuery(petId);
 
         var result = await handler.Handle(query, cancellationToken);
         if (result.IsFailure)

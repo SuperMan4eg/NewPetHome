@@ -18,6 +18,8 @@ public class PetDtoConfiguration : IEntityTypeConfiguration<PetDto>
         builder.Property(p => p.SpeciesId);
 
         builder.Property(p => p.BreedId);
+        
+        builder.Property(p => p.Color);
 
         builder.Property(p => p.IsCastrated)
             .IsRequired();
