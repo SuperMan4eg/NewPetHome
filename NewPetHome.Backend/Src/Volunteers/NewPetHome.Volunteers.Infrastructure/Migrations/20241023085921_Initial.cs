@@ -50,14 +50,14 @@ namespace NewPetHome.Volunteers.Infrastructure.Migrations
                     city = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     house_number = table.Column<int>(type: "integer", nullable: false),
                     street = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    color_value = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    description_value = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
-                    health_info_value = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    height_value = table.Column<double>(type: "double precision", nullable: false),
-                    name_value = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    phone_number_value = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
-                    position_value = table.Column<int>(type: "integer", nullable: false),
-                    weight_value = table.Column<double>(type: "double precision", nullable: false)
+                    color = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    description = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
+                    health_info = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    height = table.Column<double>(type: "double precision", nullable: false),
+                    name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    phone_number = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
+                    position = table.Column<int>(type: "integer", nullable: false),
+                    weight = table.Column<double>(type: "double precision", nullable: false)
                 },
                 constraints: table =>
                 {

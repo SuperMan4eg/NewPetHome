@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NewPetHome.Volunteers.Infrastructure.Migrations
 {
     [DbContext(typeof(VolunteersWriteDbContext))]
-    [Migration("20241022091253_Initial")]
+    [Migration("20241023085921_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -99,7 +99,7 @@ namespace NewPetHome.Volunteers.Infrastructure.Migrations
                                 .IsRequired()
                                 .HasMaxLength(100)
                                 .HasColumnType("character varying(100)")
-                                .HasColumnName("color_value");
+                                .HasColumnName("color");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("Description", "NewPetHome.Volunteers.Domain.Entities.Pet.Description#Description", b1 =>
@@ -110,7 +110,7 @@ namespace NewPetHome.Volunteers.Infrastructure.Migrations
                                 .IsRequired()
                                 .HasMaxLength(2000)
                                 .HasColumnType("character varying(2000)")
-                                .HasColumnName("description_value");
+                                .HasColumnName("description");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("HealthInfo", "NewPetHome.Volunteers.Domain.Entities.Pet.HealthInfo#HealthInfo", b1 =>
@@ -121,7 +121,7 @@ namespace NewPetHome.Volunteers.Infrastructure.Migrations
                                 .IsRequired()
                                 .HasMaxLength(100)
                                 .HasColumnType("character varying(100)")
-                                .HasColumnName("health_info_value");
+                                .HasColumnName("health_info");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("Height", "NewPetHome.Volunteers.Domain.Entities.Pet.Height#Height", b1 =>
@@ -130,7 +130,7 @@ namespace NewPetHome.Volunteers.Infrastructure.Migrations
 
                             b1.Property<double>("Value")
                                 .HasColumnType("double precision")
-                                .HasColumnName("height_value");
+                                .HasColumnName("height");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("Name", "NewPetHome.Volunteers.Domain.Entities.Pet.Name#Name", b1 =>
@@ -141,7 +141,7 @@ namespace NewPetHome.Volunteers.Infrastructure.Migrations
                                 .IsRequired()
                                 .HasMaxLength(100)
                                 .HasColumnType("character varying(100)")
-                                .HasColumnName("name_value");
+                                .HasColumnName("name");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("PhoneNumber", "NewPetHome.Volunteers.Domain.Entities.Pet.PhoneNumber#PhoneNumber", b1 =>
@@ -152,7 +152,7 @@ namespace NewPetHome.Volunteers.Infrastructure.Migrations
                                 .IsRequired()
                                 .HasMaxLength(10)
                                 .HasColumnType("character varying(10)")
-                                .HasColumnName("phone_number_value");
+                                .HasColumnName("phone_number");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("Position", "NewPetHome.Volunteers.Domain.Entities.Pet.Position#Position", b1 =>
@@ -161,7 +161,7 @@ namespace NewPetHome.Volunteers.Infrastructure.Migrations
 
                             b1.Property<int>("Value")
                                 .HasColumnType("integer")
-                                .HasColumnName("position_value");
+                                .HasColumnName("position");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("Weight", "NewPetHome.Volunteers.Domain.Entities.Pet.Weight#Weight", b1 =>
@@ -170,7 +170,7 @@ namespace NewPetHome.Volunteers.Infrastructure.Migrations
 
                             b1.Property<double>("Value")
                                 .HasColumnType("double precision")
-                                .HasColumnName("weight_value");
+                                .HasColumnName("weight");
                         });
 
                     b.HasKey("Id")
